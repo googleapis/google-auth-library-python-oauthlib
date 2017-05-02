@@ -34,9 +34,9 @@ def credentials_flow_interactive(client_secrets_path, scopes, headless):
     - If not: Run a console based flow.
 
     Args:
-      client_secrets_file: The path to the client secrets JSON file.
-      scopes: The list of scopes to request during the flow.
-      headless: If True, run a console based flow otherwise run a web
+      client_secrets_path(str): The path to the client secrets JSON file.
+      scopes(Sequence[str]): The list of scopes to request during the flow.
+      headless(bool): If True, run a console based flow otherwise run a web
       server based flow.
 
     Returns:
@@ -55,6 +55,14 @@ def credentials_flow_interactive(client_secrets_path, scopes, headless):
 
 
 def credentials_to_dict(credentials):
+    """Convert credentials to dict.
+
+    Args:
+      credentials(google.auth.credentials.Credentials): credentials to convert.
+
+    Returns:
+      dict: serializable credentials.
+    """
     return {'access_token': credentials.token,
             'refresh_token': credentials.refresh_token,
             'token_uri': credentials.token_uri,
@@ -91,7 +99,7 @@ def main(client_secrets, scope, save, credentials_file, headless):
         config_path = os.path.dirname(credentials_file)
         if not os.path.isdir(config_path):
             os.makedirs(config_path)
-        with open(credentials_file, 'w') as f:
+        with open(credentials_file, 'w') as f:  # pylint: disable=invalid-name
             json.dump(credentials_data, f)
         click.echo('credentials saved: %s' % credentials_file)
     else:
@@ -99,4 +107,4 @@ def main(client_secrets, scope, save, credentials_file, headless):
 
 
 if __name__ == '__main__':
-    main()
+    main()  # pylint: disable=no-value-for-parameter
