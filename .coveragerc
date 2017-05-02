@@ -4,6 +4,7 @@ branch = True
 [report]
 omit =
     */conftest.py
+    */__main__.py
 exclude_lines =
     # Re-enable the standard pragma
     pragma: NO COVER
