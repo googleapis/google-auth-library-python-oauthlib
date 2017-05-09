@@ -47,8 +47,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'google-oauthlib-tool'
-            '=google_auth_oauthlib.__main__:main [tool]',
+            'googlesamples-oauthlib-tool'
+            '=google_auth_oauthlib.tool.__main__:main [tool]',
         ],
     },
     license='Apache 2.0',
