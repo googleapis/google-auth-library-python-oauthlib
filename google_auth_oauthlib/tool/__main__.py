@@ -28,54 +28,14 @@ import os.path
 
 import click
 
-import google_auth_oauthlib.flow
+from google_auth_oauthlib.tool import (
+    credentials_flow_interactive,
+    credentials_to_dict
+)
 
 
 APP_NAME = 'google-oauthlib-tool'
 DEFAULT_CREDENTIALS_FILENAME = 'credentials.json'
-
-
-def credentials_flow_interactive(client_secrets_path, scopes, headless):
-    """Initiate an interactive OAuth2InstalledApp flow.
-
-    - If an X server is running: Run a browser based flow.
-    - If not: Run a console based flow.
-
-    Args:
-      client_secrets_path(str): The path to the client secrets JSON file.
-      scopes(Sequence[str]): The list of scopes to request during the flow.
-      headless(bool): If True, run a console based flow otherwise run a web
-      server based flow.
-
-    Returns:
-      google.oauth2.credentials.Credentials: new OAuth2 credentials authorized
-        with the given scopes.
-
-    """
-    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-        client_secrets_path,
-        scopes=scopes)
-    if not headless:
-        flow.run_local_server()
-    else:
-        flow.run_console()
-    return flow.credentials
-
-
-def credentials_to_dict(credentials):
-    """Convert credentials to dict.
-
-    Args:
-      credentials(google.auth.credentials.Credentials): credentials to convert.
-
-    Returns:
-      dict: serializable credentials.
-    """
-    return {'access_token': credentials.token,
-            'refresh_token': credentials.refresh_token,
-            'token_uri': credentials.token_uri,
-            'client_id': credentials.client_id,
-            'client_secret': credentials.client_secret}
 
 
 @click.command()
