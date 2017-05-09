@@ -47,7 +47,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'googlesamples-oauthlib-tool'
+            'google-oauthlib-tool'
             '=google_auth_oauthlib.tool.__main__:main [tool]',
         ],
     },

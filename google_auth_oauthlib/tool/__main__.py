@@ -31,7 +31,7 @@ import click
 import google_auth_oauthlib.flow
 
 
-APP_NAME = 'googlesamples-oauthlib-tool'
+APP_NAME = 'google-oauthlib-tool'
 DEFAULT_CREDENTIALS_FILENAME = 'credentials.json'
 
 
