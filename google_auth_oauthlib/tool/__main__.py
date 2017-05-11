@@ -112,4 +112,5 @@ def main(client_secrets, scope, save, credentials, headless):
 
 
 if __name__ == '__main__':
+    # pylint doesn't realize that click has changed the function signature.
     main()  # pylint: disable=no-value-for-parameter

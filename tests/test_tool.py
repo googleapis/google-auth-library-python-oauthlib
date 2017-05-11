@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import io
 import json
 import os.path
 import tempfile
@@ -113,8 +114,8 @@ class TestMain(object):
         assert not result.exception
         assert 'saved' in result.output
         assert result.exit_code == 0
-        with open(credentials_path) as credentials_file:
-            creds_data = json.load(credentials_file)
+        with io.open(credentials_path) as f:  # pylint: disable=invalid-name
+            creds_data = json.load(f)
             assert 'access_token' not in creds_data
             creds = google.oauth2.credentials.Credentials(
                 token=None, **creds_data
