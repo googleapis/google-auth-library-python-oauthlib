@@ -66,7 +66,8 @@ DEFAULT_CREDENTIALS_FILENAME = 'credentials.json'
 @click.option(
     '--credentials',
     metavar='<oauth2_credentials>',
-    show_default=True,default=os.path.join(
+    show_default=True,
+    default=os.path.join(
         click.get_app_dir(APP_NAME),
         DEFAULT_CREDENTIALS_FILENAME
     ),
@@ -99,7 +100,7 @@ def main(client_secrets, scope, save, credentials, headless):
         client_secrets,
         scopes=scope
     )
-    
+
     if not headless:
         creds = flow.run_local_server()
     else:
