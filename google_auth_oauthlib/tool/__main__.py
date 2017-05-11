@@ -12,7 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Command line tool for fetching credentials using 3LO OAuth2 flow.
+"""Command-line tool for obtaining authorization and credentials from a user.
+
+This tool uses the OAuth 2.0 Authorization Code grant as described in
+`section 1.3.1 of RFC 6749`__ and implemeted by
+:class:`google_auth_oauthlib.flow.Flow`.
+
+This tool is intended to bootstrap development in situation when the
+application cannot easily run the 3LO OAuth2 flow, i.e: in an embedded
+device with limited input / display capabilities.
+
+This is not intended for production where the main application should
+run the 3LO OAuth2 flow to get authorization from the users.
+
+..  __: https://tools.ietf.org/html/rfc6749#section-1.3.1
 """
 
 import json
@@ -21,10 +34,7 @@ import os.path
 
 import click
 
-from google_auth_oauthlib.tool import (
-    credentials_flow_interactive,
-    credentials_to_dict
-)
+import google_auth_oauthlib.flow
 
 
 APP_NAME = 'google-oauthlib-tool'
@@ -52,7 +62,11 @@ DEFAULT_CREDENTIALS_FILENAME = 'credentials.json'
               metavar='<headless_mode>', show_default=True, default=False,
               help='Run a console based flow.')
 def main(client_secrets, scope, save, credentials_file, headless):
-    """Command line tool for fetching credentials using 3LO OAuth2 flow.
+    """Command-line tool for obtaining authorization and credentials from a user.
+
+    This tool uses the OAuth 2.0 Authorization Code grant as described
+    in section 1.3.1 of RFC 6749:
+    https://tools.ietf.org/html/rfc6749#section-1.3.1
 
     This tool is intended to bootstrap development in situation when the
     application cannot easily run the 3LO OAuth2 flow, i.e: in an embedded
@@ -61,8 +75,22 @@ def main(client_secrets, scope, save, credentials_file, headless):
     This is not intended for production where the main application should
     run the 3LO OAuth2 flow to get authorization from the users.
     """
-    credentials = credentials_flow_interactive(client_secrets, scope, headless)
-    credentials_data = credentials_to_dict(credentials)
+
+    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+        client_secrets,
+        scopes=scope
+    )
+    if not headless:
+        credentials = flow.run_local_server()
+    else:
+        credentials = flow.run_console()
+    credentials_data = {
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id,
+        'client_secret': credentials.client_secret
+    }
+
     if save:
         config_path = os.path.dirname(credentials_file)
         if not os.path.isdir(config_path):
@@ -71,7 +99,7 @@ def main(client_secrets, scope, save, credentials_file, headless):
             json.dump(credentials_data, f)
         click.echo('credentials saved: %s' % credentials_file)
     else:
-        click.echo(credentials_data)
+        click.echo(json.dumps(credentials_data))
 
 
 if __name__ == '__main__':
