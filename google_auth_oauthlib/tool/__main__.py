@@ -122,8 +122,8 @@ def main(client_secrets, scope, save, credentials, headless):
         if not os.path.isdir(config_path):
             os.makedirs(config_path)
 
-        with io.open(credentials, 'w') as f:  # pylint: disable=invalid-name
-            json.dump(creds_data, f)
+        with open(credentials, 'w') as outfile:
+            json.dump(creds_data, outfile)
 
         click.echo('credentials saved: %s' % credentials)
 
