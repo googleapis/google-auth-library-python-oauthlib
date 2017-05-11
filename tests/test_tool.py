@@ -40,7 +40,8 @@ class TestMain(object):
             refresh_token='dummy_refresh_token',
             token_uri='dummy_token_uri',
             client_id='dummy_client_id',
-            client_secret='dummy_client_secret'
+            client_secret='dummy_client_secret',
+            scopes=['dummy_scope1', 'dummy_scope2']
         )
 
     @pytest.fixture
@@ -62,8 +63,9 @@ class TestMain(object):
     def test_help(self, runner):
         result = runner.invoke(cli.main, ['--help'])
         assert not result.exception
-        assert '3LO OAuth2 flow' in result.output
-        assert 'not intended for production' in result.output
+        assert 'RFC6749' in result.output
+        assert 'OAuth 2.0 authorization flow' in result.output
+        assert 'not intended for production use' in result.output
         assert result.exit_code == 0
 
     def test_defaults(self, runner, dummy_credentials, local_server_mock):
@@ -75,11 +77,13 @@ class TestMain(object):
         assert not result.exception
         assert result.exit_code == 0
         creds_data = json.loads(result.output)
-        assert creds_data['access_token'] == dummy_credentials.token
-        assert creds_data['refresh_token'] == dummy_credentials.refresh_token
-        assert creds_data['token_uri'] == dummy_credentials.token_uri
-        assert creds_data['client_id'] == dummy_credentials.client_id
-        assert creds_data['client_secret'] == dummy_credentials.client_secret
+        creds = google.oauth2.credentials.Credentials(**creds_data)
+        assert creds.token == dummy_credentials.token
+        assert creds.refresh_token == dummy_credentials.refresh_token
+        assert creds.token_uri == dummy_credentials.token_uri
+        assert creds.client_id == dummy_credentials.client_id
+        assert creds.client_secret == dummy_credentials.client_secret
+        assert creds.scopes == dummy_credentials.scopes
 
     def test_headless(self, runner, dummy_credentials, console_mock):
         result = runner.invoke(cli.main, [
@@ -102,7 +106,7 @@ class TestMain(object):
         result = runner.invoke(cli.main, [
             '--client-secrets', CLIENT_SECRETS_FILE,
             '--scope', 'somescope',
-            '--credentials-file', credentials_path,
+            '--credentials', credentials_path,
             '--save'
         ])
         local_server_mock.assert_called_with(mock.ANY)
@@ -126,7 +130,7 @@ class TestMain(object):
         result = runner.invoke(cli.main, [
             '--client-secrets', CLIENT_SECRETS_FILE,
             '--scope', 'somescope',
-            '--credentials-file', os.path.join(
+            '--credentials', os.path.join(
                 credentials_tmpdir,
                 'credentials.json'
             ),

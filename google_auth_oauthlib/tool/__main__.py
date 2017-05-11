@@ -15,19 +15,22 @@
 """Command-line tool for obtaining authorization and credentials from a user.
 
 This tool uses the OAuth 2.0 Authorization Code grant as described in
-`section 1.3.1 of RFC 6749`__ and implemeted by
+`section 1.3.1 of RFC6749`_ and implemeted by
 :class:`google_auth_oauthlib.flow.Flow`.
 
-This tool is intended to bootstrap development in situation when the
-application cannot easily run the 3LO OAuth2 flow, i.e: in an embedded
-device with limited input / display capabilities.
+This tool is intended for assist developers in obtaining credentials
+for testing applications where it may not be possible or easy to run a
+complete OAuth 2.0 authorization flow, especially in the case of code
+samples or embedded devices without input / display capabilities.
 
-This is not intended for production where the main application should
-run the 3LO OAuth2 flow to get authorization from the users.
+This is not intended for production use where a combination of
+companion and on-device applications should complete the OAuth 2.0
+authorization flow to get authorization from the users.
 
-..  __: https://tools.ietf.org/html/rfc6749#section-1.3.1
+.. _section 1.3.1 of RFC6749: https://tools.ietf.org/html/rfc6749#section-1.3.1
 """
 
+import io
 import json
 import os
 import os.path
@@ -51,8 +54,8 @@ DEFAULT_CREDENTIALS_FILENAME = 'credentials.json'
 @click.option('--save', is_flag=True,
               metavar='<save_mode>', show_default=True, default=False,
               help='Save the credentials to file.')
-@click.option('--credentials-file',
-              metavar='<oauth2_credentials_file>', show_default=True,
+@click.option('--credentials',
+              metavar='<oauth2_credentials>', show_default=True,
               default=os.path.join(
                   click.get_app_dir(APP_NAME),
                   DEFAULT_CREDENTIALS_FILENAME
@@ -61,19 +64,22 @@ DEFAULT_CREDENTIALS_FILENAME = 'credentials.json'
 @click.option('--headless', is_flag=True,
               metavar='<headless_mode>', show_default=True, default=False,
               help='Run a console based flow.')
-def main(client_secrets, scope, save, credentials_file, headless):
+def main(client_secrets, scope, save, credentials, headless):
     """Command-line tool for obtaining authorization and credentials from a user.
 
     This tool uses the OAuth 2.0 Authorization Code grant as described
-    in section 1.3.1 of RFC 6749:
+    in section 1.3.1 of RFC6749:
     https://tools.ietf.org/html/rfc6749#section-1.3.1
 
-    This tool is intended to bootstrap development in situation when the
-    application cannot easily run the 3LO OAuth2 flow, i.e: in an embedded
-    device with limited input / display capabilities.
+    This tool is intended for assist developers in obtaining credentials
+    for testing applications where it may not be possible or easy to run a
+    complete OAuth 2.0 authorization flow, especially in the case of code
+    samples or embedded devices without input / display capabilities.
 
-    This is not intended for production where the main application should
-    run the 3LO OAuth2 flow to get authorization from the users.
+    This is not intended for production use where a combination of
+    companion and on-device applications should complete the OAuth 2.0
+    authorization flow to get authorization from the users.
+
     """
 
     flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
@@ -81,27 +87,28 @@ def main(client_secrets, scope, save, credentials_file, headless):
         scopes=scope
     )
     if not headless:
-        credentials = flow.run_local_server()
+        creds = flow.run_local_server()
     else:
-        credentials = flow.run_console()
-    credentials_data = {
-        'access_token': credentials.token,
-        'refresh_token': credentials.refresh_token,
-        'token_uri': credentials.token_uri,
-        'client_id': credentials.client_id,
-        'client_secret': credentials.client_secret
+        creds = flow.run_console()
+    creds_data = {
+        'token': creds.token,
+        'refresh_token': creds.refresh_token,
+        'token_uri': creds.token_uri,
+        'client_id': creds.client_id,
+        'client_secret': creds.client_secret,
+        'scopes': creds.scopes
     }
 
     if save:
-        del credentials_data['access_token']
-        config_path = os.path.dirname(credentials_file)
+        del creds_data['token']
+        config_path = os.path.dirname(credentials)
         if not os.path.isdir(config_path):
             os.makedirs(config_path)
-        with open(credentials_file, 'w') as f:  # pylint: disable=invalid-name
-            json.dump(credentials_data, f)
-        click.echo('credentials saved: %s' % credentials_file)
+        with io.open(credentials, 'w') as f:  # pylint: disable=invalid-name
+            json.dump(creds_data, f)
+        click.echo('credentials saved: %s' % credentials)
     else:
-        click.echo(json.dumps(credentials_data))
+        click.echo(json.dumps(creds_data))
 
 
 if __name__ == '__main__':
