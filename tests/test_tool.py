@@ -47,17 +47,23 @@ class TestMain(object):
 
     @pytest.fixture
     def local_server_mock(self, dummy_credentials):
-        with mock.patch.object(google_auth_oauthlib.flow.InstalledAppFlow,
-                               'run_local_server',
-                               autospec=True) as flow:
+        run_local_server_patch = mock.patch.object(
+            google_auth_oauthlib.flow.InstalledAppFlow,
+            'run_local_server',
+            autospec=True)
+
+        with run_local_server_patch as flow:
             flow.return_value = dummy_credentials
             yield flow
 
     @pytest.fixture
     def console_mock(self, dummy_credentials):
-        with mock.patch.object(google_auth_oauthlib.flow.InstalledAppFlow,
-                               'run_console',
-                               autospec=True) as flow:
+        run_console_patch = mock.patch.object(
+            google_auth_oauthlib.flow.InstalledAppFlow,
+            'run_console',
+            autospec=True)
+
+        with run_console_patch as flow:
             flow.return_value = dummy_credentials
             yield flow
 
@@ -117,9 +123,9 @@ class TestMain(object):
         with io.open(credentials_path) as f:  # pylint: disable=invalid-name
             creds_data = json.load(f)
             assert 'access_token' not in creds_data
+
             creds = google.oauth2.credentials.Credentials(
-                token=None, **creds_data
-            )
+                token=None, **creds_data)
             assert creds.token is None
             assert creds.refresh_token == dummy_credentials.refresh_token
             assert creds.token_uri == dummy_credentials.token_uri
