@@ -45,25 +45,38 @@ DEFAULT_CREDENTIALS_FILENAME = 'credentials.json'
 
 
 @click.command()
-@click.option('--client-secrets',
-              metavar='<client_secret_json_file>', required=True,
-              help='Path to OAuth2 client secret JSON file.')
-@click.option('--scope', multiple=True,
-              metavar='<oauth2 scope>', required=True,
-              help='API scopes to authorize access for.')
-@click.option('--save', is_flag=True,
-              metavar='<save_mode>', show_default=True, default=False,
-              help='Save the credentials to file.')
-@click.option('--credentials',
-              metavar='<oauth2_credentials>', show_default=True,
-              default=os.path.join(
-                  click.get_app_dir(APP_NAME),
-                  DEFAULT_CREDENTIALS_FILENAME
-              ),
-              help='Path to store OAuth2 credentials.')
-@click.option('--headless', is_flag=True,
-              metavar='<headless_mode>', show_default=True, default=False,
-              help='Run a console based flow.')
+@click.option(
+    '--client-secrets',
+    metavar='<client_secret_json_file>',
+    required=True,
+    help='Path to OAuth2 client secret JSON file.')
+@click.option(
+    '--scope',
+    multiple=True,
+    metavar='<oauth2 scope>',
+    required=True,
+    help='API scopes to authorize access for.')
+@click.option(
+    '--save',
+    is_flag=True,
+    metavar='<save_mode>',
+    show_default=True,
+    default=False,
+    help='Save the credentials to file.')
+@click.option(
+    '--credentials',
+    metavar='<oauth2_credentials>',
+    show_default=True,default=os.path.join(
+        click.get_app_dir(APP_NAME),
+        DEFAULT_CREDENTIALS_FILENAME
+    ),
+    help='Path to store OAuth2 credentials.')
+@click.option(
+    '--headless',
+    is_flag=True,
+    metavar='<headless_mode>',
+    show_default=True, default=False,
+    help='Run a console based flow.')
 def main(client_secrets, scope, save, credentials, headless):
     """Command-line tool for obtaining authorization and credentials from a user.
 
@@ -86,10 +99,12 @@ def main(client_secrets, scope, save, credentials, headless):
         client_secrets,
         scopes=scope
     )
+    
     if not headless:
         creds = flow.run_local_server()
     else:
         creds = flow.run_console()
+
     creds_data = {
         'token': creds.token,
         'refresh_token': creds.refresh_token,
@@ -101,12 +116,16 @@ def main(client_secrets, scope, save, credentials, headless):
 
     if save:
         del creds_data['token']
+
         config_path = os.path.dirname(credentials)
         if not os.path.isdir(config_path):
             os.makedirs(config_path)
+
         with io.open(credentials, 'w') as f:  # pylint: disable=invalid-name
             json.dump(creds_data, f)
+
         click.echo('credentials saved: %s' % credentials)
+
     else:
         click.echo(json.dumps(creds_data))
 
