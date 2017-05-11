@@ -13,11 +13,16 @@
 # limitations under the License.
 
 import os.path
+import tempfile
 
+import click.testing
 import google.oauth2.credentials
 import mock
+import pytest
 
+import google_auth_oauthlib.flow
 import google_auth_oauthlib.tool
+import google_auth_oauthlib.tool.__main__ as cli
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 CLIENT_SECRETS_FILE = os.path.join(DATA_DIR, 'client_secrets.json')
@@ -61,3 +66,77 @@ class TestFlowInteractive(object):
             headless=False)
         run_local_server_mock.assert_called_with(mock.ANY)
         assert creds == mock.sentinel.credentials
+
+
+class TestMain(object):
+    @pytest.fixture
+    def runner(self):
+        return click.testing.CliRunner()
+
+    @pytest.fixture
+    def dummy_credentials(self):
+        return google.oauth2.credentials.Credentials(
+            token='dummy_access_token',
+            refresh_token='dummy_refresh_token',
+            token_uri='dummy_token_uri',
+            client_id='dummy_client_id',
+            client_secret='dummy_client_secret'
+        )
+
+    @pytest.fixture
+    def flow_mock(self, dummy_credentials):
+        with mock.patch.object(google_auth_oauthlib.flow.InstalledAppFlow,
+                               'run_local_server',
+                               autospec=True) as flow:
+            flow.return_value = dummy_credentials
+            yield flow
+
+    def test_help(self, runner):
+        result = runner.invoke(cli.main, ['--help'])
+        assert not result.exception
+        assert '3LO OAuth2 flow' in result.output
+        assert 'not intended for production' in result.output
+        assert result.exit_code == 0
+
+    def test_defaults(self, runner, flow_mock):
+        result = runner.invoke(cli.main, [
+            '--client-secrets', CLIENT_SECRETS_FILE,
+            '--scope', 'somescope',
+        ])
+        flow_mock.assert_called_with(mock.ANY)
+        assert not result.exception
+        assert 'dummy_refresh_token' in result.output
+        assert result.exit_code == 0
+
+    def test_save_new_dir(self, runner, flow_mock):
+        credentials_tmpdir = tempfile.mkdtemp()
+        result = runner.invoke(cli.main, [
+            '--client-secrets', CLIENT_SECRETS_FILE,
+            '--scope', 'somescope',
+            '--credentials-file', os.path.join(
+                credentials_tmpdir,
+                'new-directory',
+                'credentials.json'
+            ),
+            '--save'
+        ])
+        flow_mock.assert_called_with(mock.ANY)
+        assert not result.exception
+        assert 'saved' in result.output
+        assert result.exit_code == 0
+
+    def test_save_existing_dir(self, runner, flow_mock):
+        credentials_tmpdir = tempfile.mkdtemp()
+        result = runner.invoke(cli.main, [
+            '--client-secrets', CLIENT_SECRETS_FILE,
+            '--scope', 'somescope',
+            '--credentials-file', os.path.join(
+                credentials_tmpdir,
+                'credentials.json'
+            ),
+            '--save'
+        ])
+        flow_mock.assert_called_with(mock.ANY)
+        assert not result.exception
+        assert 'saved' in result.output
+        assert result.exit_code == 0

@@ -4,7 +4,6 @@ branch = True
 [report]
 omit =
     */conftest.py
-    */__main__.py
 exclude_lines =
     # Re-enable the standard pragma
     pragma: NO COVER
@@ -12,3 +11,4 @@ exclude_lines =
     def __repr__
     # Don't complain if tests don't hit defensive assertion code:
     raise NotImplementedError
+    if __name__ == '__main__':

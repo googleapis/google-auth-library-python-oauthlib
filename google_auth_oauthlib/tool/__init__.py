@@ -13,13 +13,6 @@
 # limitations under the License.
 
 """Command line tool for fetching credentials using 3LO OAuth2 flow.
-
-This tool is intended to bootstrap development in situation when the
-application cannot easily run the 3LO OAuth2 flow, i.e: in an embedded
-device with limited input / display capabilities.
-
-This is not intended for production where the main application should
-run the 3LO OAuth2 flow to get authorization from the users.
 """
 
 import google_auth_oauthlib.flow
