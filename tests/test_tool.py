@@ -73,18 +73,13 @@ class TestMain(object):
         ])
         local_server_mock.assert_called_with(mock.ANY)
         assert not result.exception
-        assert dummy_credentials.token not in result.output
-        assert dummy_credentials.refresh_token in result.output
         assert result.exit_code == 0
-        creds_kwargs = json.loads(result.output)
-        creds = google.oauth2.credentials.Credentials(
-            token=None, **creds_kwargs
-        )
-        assert creds.token is None
-        assert creds.refresh_token == dummy_credentials.refresh_token
-        assert creds.token_uri == dummy_credentials.token_uri
-        assert creds.client_id == dummy_credentials.client_id
-        assert creds.client_secret == dummy_credentials.client_secret
+        creds_data = json.loads(result.output)
+        assert creds_data['access_token'] == dummy_credentials.token
+        assert creds_data['refresh_token'] == dummy_credentials.refresh_token
+        assert creds_data['token_uri'] == dummy_credentials.token_uri
+        assert creds_data['client_id'] == dummy_credentials.client_id
+        assert creds_data['client_secret'] == dummy_credentials.client_secret
 
     def test_headless(self, runner, dummy_credentials, console_mock):
         result = runner.invoke(cli.main, [
@@ -97,22 +92,34 @@ class TestMain(object):
         assert dummy_credentials.refresh_token in result.output
         assert result.exit_code == 0
 
-    def test_save_new_dir(self, runner, local_server_mock):
+    def test_save_new_dir(self, runner, dummy_credentials, local_server_mock):
         credentials_tmpdir = tempfile.mkdtemp()
+        credentials_path = os.path.join(
+            credentials_tmpdir,
+            'new-directory',
+            'credentials.json'
+        )
         result = runner.invoke(cli.main, [
             '--client-secrets', CLIENT_SECRETS_FILE,
             '--scope', 'somescope',
-            '--credentials-file', os.path.join(
-                credentials_tmpdir,
-                'new-directory',
-                'credentials.json'
-            ),
+            '--credentials-file', credentials_path,
             '--save'
         ])
         local_server_mock.assert_called_with(mock.ANY)
         assert not result.exception
         assert 'saved' in result.output
         assert result.exit_code == 0
+        with open(credentials_path) as credentials_file:
+            creds_data = json.load(credentials_file)
+            assert 'access_token' not in creds_data
+            creds = google.oauth2.credentials.Credentials(
+                token=None, **creds_data
+            )
+            assert creds.token is None
+            assert creds.refresh_token == dummy_credentials.refresh_token
+            assert creds.token_uri == dummy_credentials.token_uri
+            assert creds.client_id == dummy_credentials.client_id
+            assert creds.client_secret == dummy_credentials.client_secret
 
     def test_save_existing_dir(self, runner, local_server_mock):
         credentials_tmpdir = tempfile.mkdtemp()

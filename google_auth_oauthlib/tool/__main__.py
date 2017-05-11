@@ -85,6 +85,7 @@ def main(client_secrets, scope, save, credentials_file, headless):
     else:
         credentials = flow.run_console()
     credentials_data = {
+        'access_token': credentials.token,
         'refresh_token': credentials.refresh_token,
         'token_uri': credentials.token_uri,
         'client_id': credentials.client_id,
@@ -92,6 +93,7 @@ def main(client_secrets, scope, save, credentials_file, headless):
     }
 
     if save:
+        del credentials_data['access_token']
         config_path = os.path.dirname(credentials_file)
         if not os.path.isdir(config_path):
             os.makedirs(config_path)
