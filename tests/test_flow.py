@@ -161,6 +161,7 @@ class TestInstalledAppFlow(object):
             code=mock.sentinel.code)
 
     @mock.patch('google_auth_oauthlib.flow.webbrowser', autospec=True)
+    @pytest.mark.webtest
     def test_run_local_server(
             self, webbrowser_mock, instance, mock_fetch_token):
         auth_redirect_url = urllib.parse.urljoin(
