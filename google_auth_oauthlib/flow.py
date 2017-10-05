@@ -115,7 +115,7 @@ class Flow(object):
         self.redirect_uri = redirect_uri
 
     @classmethod
-    def from_client_config(cls, client_config, scopes, **kwargs):
+    def from_client_config(cls, client_config, scopes, redirect_uri=None, **kwargs):
         """Creates a :class:`requests_oauthlib.OAuth2Session` from client
         configuration loaded from a Google-format client secrets file.
 
@@ -150,10 +150,10 @@ class Flow(object):
             google_auth_oauthlib.helpers.session_from_client_config(
                 client_config, scopes, **kwargs))
 
-        return cls(session, client_type, client_config)
+        return cls(session, client_type, client_config, redirect_uri)
 
     @classmethod
-    def from_client_secrets_file(cls, client_secrets_file, scopes, **kwargs):
+    def from_client_secrets_file(cls, client_secrets_file, scopes, redirect_uri=None, **kwargs):
         """Creates a :class:`Flow` instance from a Google client secrets file.
 
         Args:
@@ -170,7 +170,8 @@ class Flow(object):
         with open(client_secrets_file, 'r') as json_file:
             client_config = json.load(json_file)
 
-        return cls.from_client_config(client_config, scopes=scopes, **kwargs)
+        return cls.from_client_config(
+            client_config, scopes=scopes, redirect_uri=redirect_uri, **kwargs)
 
     @property
     def redirect_uri(self):
