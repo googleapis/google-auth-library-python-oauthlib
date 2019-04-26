@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""oauthlib integration for Google Auth
+
+This library provides `oauthlib <https://oauthlib.readthedocs.io/>`__
+integration with `google-auth <https://google-auth.readthedocs.io/>`__.
+"""
+
 from .interactive import get_user_credentials
 
 __all__ = ["get_user_credentials"]
