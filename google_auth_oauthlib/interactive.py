@@ -24,6 +24,13 @@ from __future__ import absolute_import
 import google_auth_oauthlib.flow
 
 
+# This client information belongs to the client authentication team and is
+# already bundled as part of the Google Cloud SDK, as used by the command:
+#
+#     gcloud auth application-default login
+#
+# By bundling these identifiers here, we avoid an unnecessary dependency on
+# having the gcloud command-line tool installed.
 _CLIENT_ID = "764086051850-6qr4p6gpi6hn506pt8ejuq83di341hur.apps.googleusercontent.com"
 _CLIENT_SECRET = "d-FL95Q19q7MQmFpd7hHD0Ty"
 
