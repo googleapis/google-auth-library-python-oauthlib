@@ -51,9 +51,11 @@ This particular flow can be handled entirely by using
 .. _OAuth 2.0 Authorization Flow:
     https://tools.ietf.org/html/rfc6749#section-1.2
 """
-
+from base64 import urlsafe_b64encode
+import hashlib
 import json
 import logging
+import secrets
 import webbrowser
 import wsgiref.simple_server
 import wsgiref.util
@@ -89,7 +91,7 @@ class Flow(object):
 
     def __init__(
             self, oauth2session, client_type, client_config,
-            redirect_uri=None):
+            redirect_uri=None, code_verifier=None):
         """
         Args:
             oauth2session (requests_oauthlib.OAuth2Session):
@@ -113,6 +115,7 @@ class Flow(object):
         self.oauth2session = oauth2session
         """requests_oauthlib.OAuth2Session: The OAuth 2.0 session."""
         self.redirect_uri = redirect_uri
+        self.code_verifier = code_verifier
 
     @classmethod
     def from_client_config(cls, client_config, scopes, **kwargs):
@@ -208,6 +211,15 @@ class Flow(object):
                 specify the ``state`` when constructing the :class:`Flow`.
         """
         kwargs.setdefault('access_type', 'offline')
+        if not self.code_verifier:
+          self.code_verifier = secrets.token_urlsafe(128)
+        c = hashlib.sha256()
+        c.update(str.encode(self.code_verifier))
+        unencoded_challenge = c.digest()
+        b64_challenge = urlsafe_b64encode(unencoded_challenge)
+        code_challenge = b64_challenge.decode().split('=')[0]
+        kwargs.setdefault('code_challenge', code_challenge)
+        kwargs.setdefault('code_challenge_method', 'S256')
         url, state = self.oauth2session.authorization_url(
             self.client_config['auth_uri'], **kwargs)
 
@@ -237,6 +249,7 @@ class Flow(object):
                 :class:`~google.auth.credentials.Credentials` instance.
         """
         kwargs.setdefault('client_secret', self.client_config['client_secret'])
+        kwargs.setdefault('code_verifier', self.code_verifier)
         return self.oauth2session.fetch_token(
             self.client_config['token_uri'], **kwargs)
 
@@ -401,6 +414,7 @@ class InstalledAppFlow(Flow):
         wsgi_app = _RedirectWSGIApp(success_message)
         local_server = wsgiref.simple_server.make_server(
             host, port, wsgi_app, handler_class=_WSGIRequestHandler)
+
 
         self.redirect_uri = 'http://{}:{}/'.format(
             host, local_server.server_port)
