@@ -55,7 +55,14 @@ from base64 import urlsafe_b64encode
 import hashlib
 import json
 import logging
-import secrets
+# secrets is preferred, fallback on SystemRandom for Python < 3.6
+# we only use secrets.choice() to generate our random string.
+try:
+    import secrets
+except ImportError:
+    from random import SystemRandom
+    secrets = SystemRandom()
+from string import ascii_letters
 import webbrowser
 import wsgiref.simple_server
 import wsgiref.util
@@ -212,7 +219,9 @@ class Flow(object):
         """
         kwargs.setdefault('access_type', 'offline')
         if not self.code_verifier:
-          self.code_verifier = secrets.token_urlsafe(128)
+          safechars = ascii_letters+'-._~'
+          random_verifier = [secrets.choice(safechars) for _ in range(0, 128)]
+          self.code_verifier = ''.join(random_verifier)
         c = hashlib.sha256()
         c.update(str.encode(self.code_verifier))
         unencoded_challenge = c.digest()
