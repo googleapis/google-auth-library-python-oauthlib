@@ -219,9 +219,9 @@ class Flow(object):
         """
         kwargs.setdefault('access_type', 'offline')
         if not self.code_verifier:
-          safechars = ascii_letters+'-._~'
-          random_verifier = [secrets.choice(safechars) for _ in range(0, 128)]
-          self.code_verifier = ''.join(random_verifier)
+            safechars = ascii_letters+'-._~'
+            random_verifier = [secrets.choice(safechars) for _ in range(0, 128)]
+            self.code_verifier = ''.join(random_verifier)
         c = hashlib.sha256()
         c.update(str.encode(self.code_verifier))
         unencoded_challenge = c.digest()
@@ -423,7 +423,6 @@ class InstalledAppFlow(Flow):
         wsgi_app = _RedirectWSGIApp(success_message)
         local_server = wsgiref.simple_server.make_server(
             host, port, wsgi_app, handler_class=_WSGIRequestHandler)
-
 
         self.redirect_uri = 'http://{}:{}/'.format(
             host, local_server.server_port)

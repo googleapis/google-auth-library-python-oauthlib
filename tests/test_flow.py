@@ -138,6 +138,7 @@ class TestFlow(object):
                 client_secret=CLIENT_SECRETS_INFO['web']['client_secret'],
                 code=mock.sentinel.code,
                 code_verifier='amanaplanacanalpanama')
+
     def test_credentials(self, instance):
         instance.oauth2session.token = {
             'access_token': mock.sentinel.access_token,
