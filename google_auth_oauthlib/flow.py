@@ -109,7 +109,8 @@ class Flow(object):
             redirect_uri (str): The OAuth 2.0 redirect URI if known at flow
                 creation time. Otherwise, it will need to be set using
                 :attr:`redirect_uri`.
-
+            code_verifier: random string of 43-128 chars used to verify the
+                key exchange.using PKCE. Auto-generated if not provided.
         .. _client secrets:
             https://developers.google.com/api-client-library/python/guide
             /aaa_client_secrets
@@ -222,9 +223,9 @@ class Flow(object):
             rnd = SystemRandom()
             random_verifier = [rnd.choice(chars) for _ in range(0, 128)]
             self.code_verifier = ''.join(random_verifier)
-        c = hashlib.sha256()
-        c.update(str.encode(self.code_verifier))
-        unencoded_challenge = c.digest()
+        code_hash = hashlib.sha256()
+        code_hash.update(str.encode(self.code_verifier))
+        unencoded_challenge = code_hash.digest()
         b64_challenge = urlsafe_b64encode(unencoded_challenge)
         code_challenge = b64_challenge.decode().split('=')[0]
         kwargs.setdefault('code_challenge', code_challenge)

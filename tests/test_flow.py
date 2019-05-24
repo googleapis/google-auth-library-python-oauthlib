@@ -17,6 +17,7 @@ import datetime
 from functools import partial
 import json
 import os
+import re
 
 import mock
 import pytest
@@ -122,6 +123,25 @@ class TestFlow(object):
                 access_type='meep',
                 code_challenge='2yN0TOdl0gkGwFOmtfx3f913tgEaLM2d2S0WlmG1Z6Q',
                 code_challenge_method='S256')
+
+    def test_authorization_url_generated_verifier(self, instance):
+        scope = 'scope_one'
+        instance.oauth2session.scope = [scope]
+        authorization_url_path = mock.patch.object(
+                instance.oauth2session, 'authorization_url',
+                wraps=instance.oauth2session.authorization_url)
+
+        with authorization_url_path as authorization_url_spy:
+            url, _ = instance.authorization_url()
+
+            _, kwargs = authorization_url_spy.call_args_list[0]
+            assert kwargs['code_challenge_method'] == 'S256'
+            assert len(instance.code_verifier) == 128
+            assert len(kwargs['code_challenge']) == 43 # 128 char verifier
+            valid_verifier = r'^[A-Za-z0-9-._~]*$'
+            valid_challenge = r'^[A-Za-z0-9-_]*$'
+            assert re.match(valid_verifier, instance.code_verifier)
+            assert re.match(valid_challenge, kwargs['code_challenge'])
 
     def test_fetch_token(self, instance):
         instance.code_verifier = 'amanaplanacanalpanama'
