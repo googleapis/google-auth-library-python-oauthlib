@@ -58,11 +58,10 @@ import logging
 # secrets is preferred, fallback on SystemRandom for Python < 3.6
 # we only use secrets.choice() to generate our random string.
 try:
-    import secrets
+    from secrets import SystemRandom
 except ImportError:
     from random import SystemRandom
-    secrets = SystemRandom()
-from string import ascii_letters
+from string import ascii_letters, digits
 import webbrowser
 import wsgiref.simple_server
 import wsgiref.util
@@ -219,8 +218,9 @@ class Flow(object):
         """
         kwargs.setdefault('access_type', 'offline')
         if not self.code_verifier:
-            safechars = ascii_letters+'-._~'
-            random_verifier = [secrets.choice(safechars) for _ in range(0, 128)]
+            chars = ascii_letters+digits+'-._~'
+            rnd = SystemRandom()
+            random_verifier = [rnd.choice(chars) for _ in range(0, 128)]
             self.code_verifier = ''.join(random_verifier)
         c = hashlib.sha256()
         c.update(str.encode(self.code_verifier))
