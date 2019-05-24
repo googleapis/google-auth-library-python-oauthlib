@@ -55,11 +55,9 @@ from base64 import urlsafe_b64encode
 import hashlib
 import json
 import logging
-# secrets is preferred, fallback on SystemRandom for Python < 3.6
-# we only use secrets.choice() to generate our random string.
 try:
     from secrets import SystemRandom
-except ImportError:
+except ImportError:  # pragma: NO COVER
     from random import SystemRandom
 from string import ascii_letters, digits
 import webbrowser
@@ -109,8 +107,9 @@ class Flow(object):
             redirect_uri (str): The OAuth 2.0 redirect URI if known at flow
                 creation time. Otherwise, it will need to be set using
                 :attr:`redirect_uri`.
-            code_verifier: random string of 43-128 chars used to verify the
-                key exchange.using PKCE. Auto-generated if not provided.
+            code_verifier (str): random string of 43-128 chars used to verify
+                the key exchange.using PKCE. Auto-generated if not provided.
+
         .. _client secrets:
             https://developers.google.com/api-client-library/python/guide
             /aaa_client_secrets
