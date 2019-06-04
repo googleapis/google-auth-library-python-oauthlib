@@ -24,41 +24,35 @@ from __future__ import absolute_import
 import google_auth_oauthlib.flow
 
 
-# This client information belongs to the client authentication team and is
-# already bundled as part of the Google Cloud SDK, as used by the command:
-#
-#     gcloud auth application-default login
-#
-# By bundling these identifiers here, we avoid an unnecessary dependency on
-# having the gcloud command-line tool installed.
-_CLIENT_ID = (
-    "764086051850-6qr4p6gpi6hn506pt8ejuq83di341hur"
-    ".apps.googleusercontent.com"
-)
-_CLIENT_SECRET = "d-FL95Q19q7MQmFpd7hHD0Ty"
-
-
-def get_user_credentials(scopes):
+def get_user_credentials(scopes, client_id, client_secret):
     """Gets credentials associated with your Google user account.
 
     This function authenticates using your user credentials by going through
-    the OAuth 2.0 flow. You'll open a browser window asking for you to
-    authenticate to your Google account using authentication library. The
-    permissions it requests correspond to the scopes you've provided.
+    the OAuth 2.0 flow. You'll open a browser window to authenticate to your
+    Google account. The permissions it requests correspond to the scopes
+    you've provided.
 
-    .. warning::
-        If you are writing an application, tool, or library which accesses
-        Google APIs, use the :mod:`google_auth_oauthlib.flow` module directly
-        and supply client information identifying your application. You are
-        `required by the Google APIs terms of service
-        <https://developers.google.com/terms/#c_permitted_access>`__ to
-        accurately identify your application.
+    To obtain the ``client_id`` and ``client_secret``, create an **OAuth
+    client ID** with application type **Other** from the `Credentials page on
+    the Google Developer's Console
+    <https://console.developers.google.com/apis/credentials>`_. Learn more
+    with the `Authenticating as an end user
+    <https://cloud.google.com/docs/authentication/end-user>`_ guide.
 
     Args:
         scopes (Sequence[str]):
             A list of scopes to use when authenticating to Google APIs. See
             the `list of OAuth 2.0 scopes for Google APIs
             <https://developers.google.com/identity/protocols/googlescopes>`_.
+        client_id (str):
+            A string that identifies your application to Google APIs. Find
+            this value in the `Credentials page on the Google Developer's
+            Console
+            <https://console.developers.google.com/apis/credentials>`_.
+        client_secret (str):
+            A string that verifies your application to Google APIs. Find this
+            value in the `Credentials page on the Google Developer's Console
+            <https://console.developers.google.com/apis/credentials>`_.
 
     Returns:
         google.oauth2.credentials.Credentials:
@@ -67,11 +61,11 @@ def get_user_credentials(scopes):
 
     client_config = {
         "installed": {
-            "client_id": _CLIENT_ID,
-            "client_secret": _CLIENT_SECRET,
+            "client_id": client_id,
+            "client_secret": client_secret,
             "redirect_uris": ["urn:ietf:wg:oauth:2.0:oob"],
             "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://accounts.google.com/o/oauth2/token",
+            "token_uri": "https://oauth2.googleapis.com/token",
         }
     }
 
