@@ -28,7 +28,11 @@ def test_get_user_credentials():
         "google_auth_oauthlib.flow.InstalledAppFlow", autospec=True
     ) as mock_flow:
         mock_flow.from_client_config.return_value = mock_flow_instance
-        module_under_test.get_user_credentials(["scopes"], "some-client-id", "shh-secret")
+        module_under_test.get_user_credentials(
+            ["scopes"],
+            "some-client-id",
+            "shh-secret",
+        )
 
     mock_flow.from_client_config.assert_called_once_with(
         mock.ANY,
