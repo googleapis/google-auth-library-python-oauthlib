@@ -51,6 +51,13 @@ class TestFlow(object):
                 instance.oauth2session.redirect_uri ==
                 mock.sentinel.redirect_uri)
 
+    def test_from_client_secrets_file_with_code_verifier(self):
+        instance = flow.Flow.from_client_secrets_file(
+            CLIENT_SECRETS_FILE, scopes=mock.sentinel.scopes,
+            code_verifier=mock.sentinel.code_verifier
+        )
+        assert instance.code_verifier == mock.sentinel.code_verifier
+
     def test_from_client_config_installed(self):
         client_config = {'installed': CLIENT_SECRETS_INFO['web']}
         instance = flow.Flow.from_client_config(
@@ -69,6 +76,15 @@ class TestFlow(object):
         assert (instance.redirect_uri ==
                 instance.oauth2session.redirect_uri ==
                 mock.sentinel.redirect_uri)
+
+    def test_from_client_config_with_code_verifier(self):
+        client_config = {'installed': CLIENT_SECRETS_INFO['web']}
+        instance = flow.Flow.from_client_config(
+            client_config, scopes=mock.sentinel.scopes,
+            code_verifier=mock.sentinel.code_verifier,
+            redirect_uri=mock.sentinel.redirect_uri
+        )
+        assert instance.code_verifier == mock.sentinel.code_verifier
 
     def test_from_client_config_bad_format(self):
         with pytest.raises(ValueError):

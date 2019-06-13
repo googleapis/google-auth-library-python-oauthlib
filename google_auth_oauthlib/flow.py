@@ -155,12 +155,15 @@ class Flow(object):
             raise ValueError(
                 'Client secrets must be for a web or installed app.')
 
+        code_verifier = kwargs.pop('code_verifier', None)
+
         session, client_config = (
             google_auth_oauthlib.helpers.session_from_client_config(
                 client_config, scopes, **kwargs))
 
         redirect_uri = kwargs.get('redirect_uri', None)
-        return cls(session, client_type, client_config, redirect_uri)
+        return cls(
+            session, client_type, client_config, redirect_uri, code_verifier)
 
     @classmethod
     def from_client_secrets_file(cls, client_secrets_file, scopes, **kwargs):
