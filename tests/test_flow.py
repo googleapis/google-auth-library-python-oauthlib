@@ -88,6 +88,23 @@ class TestFlow(object):
     def test_authorization_url(self, instance):
         scope = 'scope_one'
         instance.oauth2session.scope = [scope]
+        authorization_url_patch = mock.patch.object(
+            instance.oauth2session, 'authorization_url',
+            wraps=instance.oauth2session.authorization_url)
+
+        with authorization_url_patch as authorization_url_spy:
+            url, _ = instance.authorization_url(prompt='consent')
+
+            assert CLIENT_SECRETS_INFO['web']['auth_uri'] in url
+            assert scope in url
+            authorization_url_spy.assert_called_with(
+                CLIENT_SECRETS_INFO['web']['auth_uri'],
+                access_type='offline',
+                prompt='consent')
+
+    def test_authorization_url_code_verifier(self, instance):
+        scope = 'scope_one'
+        instance.oauth2session.scope = [scope]
         instance.code_verifier = 'amanaplanacanalpanama'
         authorization_url_patch = mock.patch.object(
             instance.oauth2session, 'authorization_url',
@@ -123,25 +140,6 @@ class TestFlow(object):
                 access_type='meep',
                 code_challenge='2yN0TOdl0gkGwFOmtfx3f913tgEaLM2d2S0WlmG1Z6Q',
                 code_challenge_method='S256')
-
-    def test_authorization_url_generated_verifier(self, instance):
-        scope = 'scope_one'
-        instance.oauth2session.scope = [scope]
-        authorization_url_path = mock.patch.object(
-            instance.oauth2session, 'authorization_url',
-            wraps=instance.oauth2session.authorization_url)
-
-        with authorization_url_path as authorization_url_spy:
-            instance.authorization_url()
-
-            _, kwargs = authorization_url_spy.call_args_list[0]
-            assert kwargs['code_challenge_method'] == 'S256'
-            assert len(instance.code_verifier) == 128
-            assert len(kwargs['code_challenge']) == 43
-            valid_verifier = r'^[A-Za-z0-9-._~]*$'
-            valid_challenge = r'^[A-Za-z0-9-_]*$'
-            assert re.match(valid_verifier, instance.code_verifier)
-            assert re.match(valid_challenge, kwargs['code_challenge'])
 
     def test_fetch_token(self, instance):
         instance.code_verifier = 'amanaplanacanalpanama'
@@ -222,6 +220,21 @@ class TestInstalledAppFlow(object):
     @mock.patch('google_auth_oauthlib.flow.input', autospec=True)
     def test_run_console(self, input_mock, instance, mock_fetch_token):
         input_mock.return_value = mock.sentinel.code
+        credentials = instance.run_console()
+
+        assert credentials.token == mock.sentinel.access_token
+        assert credentials._refresh_token == mock.sentinel.refresh_token
+        assert credentials.id_token == mock.sentinel.id_token
+
+        mock_fetch_token.assert_called_with(
+            CLIENT_SECRETS_INFO['web']['token_uri'],
+            client_secret=CLIENT_SECRETS_INFO['web']['client_secret'],
+            code=mock.sentinel.code,
+            code_verifier=None)
+
+    @mock.patch('google_auth_oauthlib.flow.input', autospec=True)
+    def test_run_console(self, input_mock, instance, mock_fetch_token):
+        input_mock.return_value = mock.sentinel.code
         instance.code_verifier = 'amanaplanacanalpanama'
         credentials = instance.run_console()
 
@@ -238,6 +251,38 @@ class TestInstalledAppFlow(object):
     @pytest.mark.webtest
     @mock.patch('google_auth_oauthlib.flow.webbrowser', autospec=True)
     def test_run_local_server(
+            self, webbrowser_mock, instance, mock_fetch_token):
+        auth_redirect_url = urllib.parse.urljoin(
+            'http://localhost:60452',
+            self.REDIRECT_REQUEST_PATH)
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(partial(
+                instance.run_local_server, port=60452))
+
+            while not future.done():
+                try:
+                    requests.get(auth_redirect_url)
+                except requests.ConnectionError:  # pragma: NO COVER
+                    pass
+
+            credentials = future.result()
+
+        assert credentials.token == mock.sentinel.access_token
+        assert credentials._refresh_token == mock.sentinel.refresh_token
+        assert credentials.id_token == mock.sentinel.id_token
+        assert webbrowser_mock.open.called
+
+        expected_auth_response = auth_redirect_url.replace('http', 'https')
+        mock_fetch_token.assert_called_with(
+            CLIENT_SECRETS_INFO['web']['token_uri'],
+            client_secret=CLIENT_SECRETS_INFO['web']['client_secret'],
+            authorization_response=expected_auth_response,
+            code_verifier=None)
+
+    @pytest.mark.webtest
+    @mock.patch('google_auth_oauthlib.flow.webbrowser', autospec=True)
+    def test_run_local_server_code_verifier(
             self, webbrowser_mock, instance, mock_fetch_token):
         auth_redirect_url = urllib.parse.urljoin(
             'http://localhost:60452',
