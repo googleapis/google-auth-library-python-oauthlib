@@ -144,7 +144,8 @@ class TestFlow(object):
     def test_authorization_url_generated_verifier(self):
         scope = 'scope_one'
         instance = flow.Flow.from_client_config(
-            CLIENT_SECRETS_INFO, scopes=[scope], autogenerate_code_verifier=True)
+            CLIENT_SECRETS_INFO, scopes=[scope],
+            autogenerate_code_verifier=True)
         authorization_url_path = mock.patch.object(
             instance.oauth2session, 'authorization_url',
             wraps=instance.oauth2session.authorization_url)
@@ -236,21 +237,6 @@ class TestInstalledAppFlow(object):
 
         with fetch_token_patch as fetch_token_mock:
             yield fetch_token_mock
-
-    @mock.patch('google_auth_oauthlib.flow.input', autospec=True)
-    def test_run_console(self, input_mock, instance, mock_fetch_token):
-        input_mock.return_value = mock.sentinel.code
-        credentials = instance.run_console()
-
-        assert credentials.token == mock.sentinel.access_token
-        assert credentials._refresh_token == mock.sentinel.refresh_token
-        assert credentials.id_token == mock.sentinel.id_token
-
-        mock_fetch_token.assert_called_with(
-            CLIENT_SECRETS_INFO['web']['token_uri'],
-            client_secret=CLIENT_SECRETS_INFO['web']['client_secret'],
-            code=mock.sentinel.code,
-            code_verifier=None)
 
     @mock.patch('google_auth_oauthlib.flow.input', autospec=True)
     def test_run_console(self, input_mock, instance, mock_fetch_token):

@@ -95,7 +95,8 @@ class Flow(object):
 
     def __init__(
             self, oauth2session, client_type, client_config,
-            redirect_uri=None, code_verifier=None, autogenerate_code_verifier=False):
+            redirect_uri=None, code_verifier=None,
+            autogenerate_code_verifier=False):
         """
         Args:
             oauth2session (requests_oauthlib.OAuth2Session):
@@ -159,7 +160,8 @@ class Flow(object):
 
         # these args cannot be passed to requests_oauthlib.OAuth2Session
         code_verifier = kwargs.pop('code_verifier', None)
-        autogenerate_code_verifier = kwargs.pop('autogenerate_code_verifier', None)
+        autogenerate_code_verifier = kwargs.pop(
+            'autogenerate_code_verifier', None)
 
         session, client_config = (
             google_auth_oauthlib.helpers.session_from_client_config(
@@ -167,7 +169,14 @@ class Flow(object):
 
         redirect_uri = kwargs.get('redirect_uri', None)
 
-        return cls(session, client_type, client_config, redirect_uri, code_verifier, autogenerate_code_verifier)
+        return cls(
+            session,
+            client_type,
+            client_config,
+            redirect_uri,
+            code_verifier,
+            autogenerate_code_verifier
+        )
 
     @classmethod
     def from_client_secrets_file(cls, client_secrets_file, scopes, **kwargs):
