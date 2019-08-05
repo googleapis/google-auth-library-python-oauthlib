@@ -21,6 +21,8 @@ cd github/google-auth-library-python-oauthlib
 # Disable buffering, so that the logs stream through.
 export PYTHONUNBUFFERED=1
 
+python3 -m pip install nox
+
 # Run tests
 nox -s lint test
 
