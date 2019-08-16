@@ -1,12 +1,14 @@
-import os
 import json
+import os
 
 import google.auth
 import google.oauth2.id_token
 from google.oauth2.credentials import Credentials
 from google.oauth2.file import Storage
-from googleapiclient.discovery import build
+
 from google_auth_oauthlib.flow import InstalledAppFlow
+
+from googleapiclient.discovery import build
 
 
 _APP_JSON_FILE_NOT_FOUND_MESSAGE = 'OAuth app credentials file {} not found'
@@ -34,8 +36,8 @@ class LoadSaveCredsFlow:
         Args:
             storage_file (str):   file that should contain the user credentials
             app_json_file (str):  file that contains the OAuth app credentials
-            scopes (list of str): list of Google scopes that should be used when
-                                  creating the API service objet
+            scopes (list of str): list of Google scopes that should be used
+                                  when creating the API service objet
             service (str):        Google API service name
             version (str):        Google API service version
             interactive (bool):   True uses the slightly more interactive CLI
@@ -51,7 +53,7 @@ class LoadSaveCredsFlow:
         try:
             self._credentials = Credentials.from_authorized_user_file(
                     storage_file)
-        except (json.JSONDecodeError, FileNotFoundError) as e:
+        except (json.JSONDecodeError, FileNotFoundError):
             flow = InstalledAppFlow.from_client_secrets_file(
                     app_json_file,
                     scopes=scopes)
