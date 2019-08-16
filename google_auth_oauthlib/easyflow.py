@@ -2,13 +2,13 @@ import json
 import os
 
 import google.auth
-import google.oauth2.id_token
 from google.oauth2.credentials import Credentials
+import google.oauth2.id_token
 from google.oauth2.file import Storage
 
-from google_auth_oauthlib.flow import InstalledAppFlow
-
 from googleapiclient.discovery import build
+
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 _APP_JSON_FILE_NOT_FOUND_MESSAGE = 'OAuth app credentials file {} not found'
