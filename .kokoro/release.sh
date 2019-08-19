@@ -21,7 +21,7 @@ python3 -m pip install gcp-releasetool
 python3 -m releasetool publish-reporter-script > /tmp/publisher-script; source /tmp/publisher-script
 
 
-cd github/releasetool
+cd github/google-auth-library-python-oauthlib
 TWINE_USERNAME=$(cat "${KOKORO_GFILE_DIR}/twine-username.txt")
 TWINE_PASSWORD=$(cat "${KOKORO_GFILE_DIR}/twine-password.txt")
 
