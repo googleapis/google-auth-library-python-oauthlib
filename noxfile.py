@@ -66,7 +66,7 @@ def lint(session):
     )
 
 
-@nox.session(python=["2.7", "3.5", "3.6", "3.7", "pypy"])
+@nox.session(python=["2.7", "3.5", "3.6", "3.7"])
 def test(session):
     session.install("mock", "pytest", "pytest-cov", "futures", "click")
     session.install(".")
