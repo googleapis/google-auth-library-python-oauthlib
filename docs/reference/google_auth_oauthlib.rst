@@ -2,16 +2,16 @@ google\_auth\_oauthlib package
 ==============================
 
 .. automodule:: google_auth_oauthlib
-    :members:
-    :inherited-members:
-    :show-inheritance:
+   :members:
+   :inherited-members:
+   :show-inheritance:
 
 Subpackages
 -----------
 
 .. toctree::
 
-    google_auth_oauthlib.tool
+   google_auth_oauthlib.tool
 
 Submodules
 ----------
@@ -20,4 +20,4 @@ Submodules
 
    google_auth_oauthlib.flow
    google_auth_oauthlib.helpers
-
+   google_auth_oauthlib.interactive

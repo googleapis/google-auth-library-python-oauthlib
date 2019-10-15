@@ -367,9 +367,9 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3.5', None),
+    'python': ('https://docs.python.org/3.7', None),
     'urllib3': ('https://urllib3.readthedocs.io/en/stable', None),
-    'requests': ('http://docs.python-requests.org/en/stable', None),
+    'requests': ('https://requests.kennethreitz.org/en/stable', None),
     'requests-oauthlib': (
         'http://requests-oauthlib.readthedocs.io/en/stable', None),
     'google-auth': ('http://google-auth.readthedocs.io/en/stable', None),

@@ -2,3 +2,5 @@ sphinx-docstring-typing
 requests
 requests-oauthlib
 click
+alabaster
+recommonmark
