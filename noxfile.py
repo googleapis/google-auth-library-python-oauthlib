@@ -84,6 +84,7 @@ def docgen(session):
         "google_auth_oauthlib",
     )
 
+
 @nox.session(python="3.7")
 def docs(session):
     """Build the docs for this library."""
