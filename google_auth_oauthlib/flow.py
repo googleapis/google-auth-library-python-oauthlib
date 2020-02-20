@@ -465,7 +465,7 @@ class InstalledAppFlow(Flow):
 
         # Note: using https here because oauthlib is very picky that
         # OAuth 2.0 should only occur over https.
-        authorization_response = wsgi_app.last_request_uri.replace("http", "https")
+        authorization_response = wsgi_app.last_request_uri.replace("http:", "https:")
         self.fetch_token(authorization_response=authorization_response)
 
         return self.credentials
