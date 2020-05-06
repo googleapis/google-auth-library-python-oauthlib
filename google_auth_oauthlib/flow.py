@@ -434,7 +434,8 @@ class InstalledAppFlow(Flow):
         Args:
             host (str): The hostname for the local redirect server. This will
                 be served over http, not https.
-            port (int): The port for the local redirect server.
+            port (int): The port for the local redirect server. Pass 0 to 
+                automatically assign an unused port.
             authorization_prompt_message (str): The message to display to tell
                 the user to navigate to the authorization URL.
             success_message (str): The message to display in the web browser
