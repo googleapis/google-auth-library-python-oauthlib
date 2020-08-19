@@ -354,8 +354,7 @@ class InstalledAppFlow(Flow):
     response, such as using an embedded web view.
 
     .. _Installed Application Authorization Flow:
-        https://developers.google.com/api-client-library/python/auth
-        /installed-app
+        https://github.com/googleapis/google-api-python-client/blob/master/docs/oauth-installed.md
     """
 
     _OOB_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
