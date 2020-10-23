@@ -22,6 +22,7 @@ import re
 import mock
 import pytest
 import requests
+import socket
 from six.moves import urllib
 
 from google_auth_oauthlib import flow
@@ -358,5 +359,17 @@ class TestInstalledAppFlow(object):
         make_server_mock.side_effect = assign_last_request_uri
 
         instance.run_local_server(open_browser=False)
+
+        assert not webbrowser_mock.open.called
+
+    @mock.patch("google_auth_oauthlib.flow.webbrowser", autospec=True)
+    def test_run_local_server_no_browser_occupied_port(
+        self, webbrowser_mock, instance, mock_fetch_token
+    ):
+        # try to create two servers
+        # the second should fail with an OSError
+        instance.run_local_server(open_browser=False, port=8081)
+        with pytest.raises(OSError):
+            instance.run_local_server(open_browser=False, port=8081)
 
         assert not webbrowser_mock.open.called

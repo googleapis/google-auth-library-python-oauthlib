@@ -71,6 +71,8 @@ from six.moves import input
 
 import google_auth_oauthlib.helpers
 
+from socketserver import TCPServer
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -449,6 +451,8 @@ class InstalledAppFlow(Flow):
                 for the user.
         """
         wsgi_app = _RedirectWSGIApp(success_message)
+        # Fail fast if the port address is occupied
+        wsgiref.simple_server.WSGIServer.allow_reuse_address = False
         local_server = wsgiref.simple_server.make_server(
             host, port, wsgi_app, handler_class=_WSGIRequestHandler
         )
