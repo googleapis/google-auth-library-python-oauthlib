@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# google-auth documentation build configuration file
+# google-auth-oauthlib documentation build configuration file
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -67,7 +67,7 @@ source_suffix = [".rst", ".md"]
 master_doc = "index"
 
 # General information about the project.
-project = u"google-auth"
+project = u"google-auth-oauthlib"
 copyright = u"2019, Google"
 author = u"Google APIs"
 
@@ -140,9 +140,9 @@ html_theme = "alabaster"
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "description": "Google Cloud Client Libraries for google-auth",
+    "description": "Google Cloud Client Libraries for google-auth-oauthlib",
     "github_user": "googleapis",
-    "github_repo": "google-auth-library-python",
+    "github_repo": "google-auth-library-python-oauthlib",
     "github_banner": True,
     "font_family": "'Roboto', Georgia, sans",
     "head_font_family": "'Roboto', Georgia, serif",
@@ -234,7 +234,7 @@ html_static_path = ["_static"]
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "google-auth-doc"
+htmlhelp_basename = "google-auth-oauthlib-doc"
 
 # -- Options for warnings ------------------------------------------------------
 
@@ -267,8 +267,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "google-auth.tex",
-        u"google-auth Documentation",
+        "google-auth-oauthlib.tex",
+        u"google-auth-oauthlib Documentation",
         author,
         "manual",
     )
@@ -302,8 +302,8 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        "google-auth",
-        u"google-auth Documentation",
+        "google-auth-oauthlib",
+        u"google-auth-oauthlib Documentation",
         [author],
         1,
     )
@@ -321,11 +321,11 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "google-auth",
-        u"google-auth Documentation",
+        "google-auth-oauthlib",
+        u"google-auth-oauthlib Documentation",
         author,
-        "google-auth",
-        "google-auth Library",
+        "google-auth-oauthlib",
+        "google-auth-oauthlib Library",
         "APIs",
     )
 ]
@@ -352,6 +352,7 @@ intersphinx_mapping = {
         None,
     ),
     "grpc": ("https://grpc.io/grpc/python/", None),
+    "proto-plus": ("https://proto-plus-python.readthedocs.io/en/latest/", None),
     
 }
 

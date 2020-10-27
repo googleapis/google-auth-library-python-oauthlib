@@ -15,7 +15,7 @@
 
 set -eo pipefail
 
-cd github/google-auth-library-python
+cd github/google-auth-library-python-oauthlib
 
 # Disable buffering, so that the logs stream through.
 export PYTHONUNBUFFERED=1

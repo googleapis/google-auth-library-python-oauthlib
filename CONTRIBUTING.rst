@@ -35,21 +35,21 @@ Using a Development Checkout
 You'll have to create a development environment using a Git checkout:
 
 - While logged into your GitHub account, navigate to the
-  ``google-auth-library-python`` `repo`_ on GitHub.
+  ``google-auth-library-python-oauthlib`` `repo`_ on GitHub.
 
-- Fork and clone the ``google-auth-library-python`` repository to your GitHub account by
+- Fork and clone the ``google-auth-library-python-oauthlib`` repository to your GitHub account by
   clicking the "Fork" button.
 
-- Clone your fork of ``google-auth-library-python`` from your GitHub account to your local
+- Clone your fork of ``google-auth-library-python-oauthlib`` from your GitHub account to your local
   computer, substituting your account username and specifying the destination
-  as ``hack-on-google-auth-library-python``.  E.g.::
+  as ``hack-on-google-auth-library-python-oauthlib``.  E.g.::
 
    $ cd ${HOME}
-   $ git clone git@github.com:USERNAME/google-auth-library-python.git hack-on-google-auth-library-python
-   $ cd hack-on-google-auth-library-python
-   # Configure remotes such that you can pull changes from the googleapis/google-auth-library-python
+   $ git clone git@github.com:USERNAME/google-auth-library-python-oauthlib.git hack-on-google-auth-library-python-oauthlib
+   $ cd hack-on-google-auth-library-python-oauthlib
+   # Configure remotes such that you can pull changes from the googleapis/google-auth-library-python-oauthlib
    # repository into your local repository.
-   $ git remote add upstream git@github.com:googleapis/google-auth-library-python.git
+   $ git remote add upstream git@github.com:googleapis/google-auth-library-python-oauthlib.git
    # fetch and merge changes from upstream into master
    $ git fetch upstream
    $ git merge upstream/master
@@ -60,7 +60,7 @@ repo, from which you can submit a pull request.
 To work on the codebase and run the tests, we recommend using ``nox``,
 but you can also use a ``virtualenv`` of your own creation.
 
-.. _repo: https://github.com/googleapis/google-auth-library-python
+.. _repo: https://github.com/googleapis/google-auth-library-python-oauthlib
 
 Using ``nox``
 =============
@@ -107,7 +107,7 @@ Coding Style
    export GOOGLE_CLOUD_TESTING_BRANCH="master"
 
   By doing this, you are specifying the location of the most up-to-date
-  version of ``google-auth-library-python``. The the suggested remote name ``upstream``
+  version of ``google-auth-library-python-oauthlib``. The the suggested remote name ``upstream``
   should point to the official ``googleapis`` checkout and the
   the branch should be the main branch on that remote (``master``).
 
@@ -180,10 +180,10 @@ The `description on PyPI`_ for the project comes directly from the
 ``README``. Due to the reStructuredText (``rst``) parser used by
 PyPI, relative links which will work on GitHub (e.g. ``CONTRIBUTING.rst``
 instead of
-``https://github.com/googleapis/google-auth-library-python/blob/master/CONTRIBUTING.rst``)
+``https://github.com/googleapis/google-auth-library-python-oauthlib/blob/master/CONTRIBUTING.rst``)
 may cause problems creating links or rendering the description.
 
-.. _description on PyPI: https://pypi.org/project/google-auth
+.. _description on PyPI: https://pypi.org/project/google-auth-oauthlib
 
 
 *************************
@@ -205,7 +205,7 @@ We support:
 
 Supported versions can be found in our ``noxfile.py`` `config`_.
 
-.. _config: https://github.com/googleapis/google-auth-library-python/blob/master/noxfile.py
+.. _config: https://github.com/googleapis/google-auth-library-python-oauthlib/blob/master/noxfile.py
 
 Python 2.7 support is deprecated. All code changes should maintain Python 2.7 compatibility until January 1, 2020.
 

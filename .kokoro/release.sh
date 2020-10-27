@@ -27,6 +27,6 @@ export PYTHONUNBUFFERED=1
 
 # Move into the package, build the distribution and upload.
 TWINE_PASSWORD=$(cat "${KOKORO_KEYSTORE_DIR}/73713_google_cloud_pypi_password")
-cd github/google-auth-library-python
+cd github/google-auth-library-python-oauthlib
 python3 setup.py sdist bdist_wheel
 twine upload --username gcloudpypi --password "${TWINE_PASSWORD}" dist/*
