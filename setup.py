@@ -43,13 +43,11 @@ setup(
             "google-oauthlib-tool" "=google_auth_oauthlib.tool.__main__:main [tool]"
         ]
     },
+    python_requires=">=3.6",
     license="Apache 2.0",
     keywords="google auth oauth client oauthlib",
     classifiers=(
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
