@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "git@github.com:googleapis/google-auth-library-python-oauthlib",
-        "sha": "3920e0c830f6b5337bc85dfe2c8737c2983d54bb"
+        "sha": "cdacc420dba2c32b8508653821f6f8c45d2e3e6d"
       }
     },
     {

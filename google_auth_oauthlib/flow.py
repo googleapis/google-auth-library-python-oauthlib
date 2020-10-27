@@ -169,7 +169,10 @@ class Flow(object):
         code_verifier = kwargs.pop("code_verifier", None)
         autogenerate_code_verifier = kwargs.pop("autogenerate_code_verifier", None)
 
-        session, client_config = google_auth_oauthlib.helpers.session_from_client_config(
+        (
+            session,
+            client_config,
+        ) = google_auth_oauthlib.helpers.session_from_client_config(
             client_config, scopes, **kwargs
         )
 

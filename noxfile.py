@@ -24,11 +24,12 @@ import nox
 
 
 BLACK_VERSION = "black==19.10b0"
-BLACK_PATHS = ["docs", "google", "tests", "noxfile.py", "setup.py"]
+BLACK_PATHS = ["docs", "google_auth_oauthlib", "tests", "noxfile.py", "setup.py"]
 
-DEFAULT_PYTHON_VERSION="3.8"
-SYSTEM_TEST_PYTHON_VERSIONS=["2.7","3.8"]
-UNIT_TEST_PYTHON_VERSIONS=["2.7","3.5","3.6","3.7","3.8"]
+DEFAULT_PYTHON_VERSION = "3.8"
+SYSTEM_TEST_PYTHON_VERSIONS = ["2.7", "3.8"]
+UNIT_TEST_PYTHON_VERSIONS = ["2.7", "3.5", "3.6", "3.7", "3.8"]
+
 
 @nox.session(python=DEFAULT_PYTHON_VERSION)
 def lint(session):
@@ -39,9 +40,7 @@ def lint(session):
     """
     session.install("flake8", BLACK_VERSION)
     session.run(
-        "black",
-        "--check",
-        *BLACK_PATHS,
+        "black", "--check", *BLACK_PATHS,
     )
     session.run("flake8", "google", "tests")
 
@@ -58,8 +57,7 @@ def blacken(session):
     """
     session.install(BLACK_VERSION)
     session.run(
-        "black",
-        *BLACK_PATHS,
+        "black", *BLACK_PATHS,
     )
 
 
@@ -72,10 +70,8 @@ def lint_setup_py(session):
 
 def default(session):
     # Install all test dependencies, then install this package in-place.
-    session.install("mock", "pytest", "pytest-cov" )
+    session.install("mock", "pytest", "pytest-cov", "click")
     session.install("-e", ".")
-    
-    
 
     # Run py.test against the unit tests.
     session.run(
@@ -92,6 +88,7 @@ def default(session):
         *session.posargs,
     )
 
+
 @nox.session(python=UNIT_TEST_PYTHON_VERSIONS)
 def unit(session):
     """Run the unit test suite."""
@@ -105,7 +102,7 @@ def system(session):
     system_test_folder_path = os.path.join("tests", "system")
 
     # Check the value of `RUN_SYSTEM_TESTS` env var. It defaults to true.
-    if os.environ.get("RUN_SYSTEM_TESTS", "true") == 'false':
+    if os.environ.get("RUN_SYSTEM_TESTS", "true") == "false":
         session.skip("RUN_SYSTEM_TESTS is set to false, skipping")
     # Sanity check: Only run tests if the environment variable is set.
     if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", ""):
@@ -122,16 +119,16 @@ def system(session):
 
     # Install all test dependencies, then install this package into the
     # virtualenv's dist-packages.
-    session.install("mock", "pytest", "google-cloud-testutils", )
+    session.install(
+        "mock", "pytest", "google-cloud-testutils",
+    )
     session.install("-e", ".")
-
 
     # Run py.test against the system tests.
     if system_test_exists:
         session.run("py.test", "--quiet", system_test_path, *session.posargs)
     if system_test_folder_exists:
         session.run("py.test", "--quiet", system_test_folder_path, *session.posargs)
-
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION)
@@ -146,23 +143,26 @@ def cover(session):
 
     session.run("coverage", "erase")
 
+
 @nox.session(python=DEFAULT_PYTHON_VERSION)
 def docs(session):
     """Build the docs for this library."""
 
-    session.install('-e', '.')
-    session.install('sphinx', 'alabaster', 'recommonmark')
+    session.install("-e", ".")
+    session.install("sphinx", "alabaster", "recommonmark")
 
-    shutil.rmtree(os.path.join('docs', '_build'), ignore_errors=True)
+    shutil.rmtree(os.path.join("docs", "_build"), ignore_errors=True)
     session.run(
-        'sphinx-build',
-        '-W',  # warnings as errors
-        '-T',  # show full traceback on exception
-        '-N',  # no colors
-        '-b', 'html',
-        '-d', os.path.join('docs', '_build', 'doctrees', ''),
-        os.path.join('docs', ''),
-        os.path.join('docs', '_build', 'html', ''),
+        "sphinx-build",
+        "-W",  # warnings as errors
+        "-T",  # show full traceback on exception
+        "-N",  # no colors
+        "-b",
+        "html",
+        "-d",
+        os.path.join("docs", "_build", "doctrees", ""),
+        os.path.join("docs", ""),
+        os.path.join("docs", "_build", "html", ""),
     )
 
 

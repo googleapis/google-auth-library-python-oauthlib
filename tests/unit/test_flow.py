@@ -389,5 +389,3 @@ class TestInstalledAppFlow(object):
     #                     break
     #             except requests.ConnectionError:  # pragma: NO COVER
     #                 pass
-                
-    
