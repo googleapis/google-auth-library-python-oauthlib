@@ -1,0 +1,18 @@
+{
+  "sources": [
+    {
+      "git": {
+        "name": ".",
+        "remote": "git@github.com:googleapis/google-auth-library-python-oauthlib",
+        "sha": "4f67d7bb6120c17fb7c085da520788ba229e3411"
+      }
+    },
+    {
+      "git": {
+        "name": "synthtool",
+        "remote": "https://github.com/googleapis/synthtool.git",
+        "sha": "a783321fd55f010709294455584a553f4b24b944"
+      }
+    }
+  ]
+}
