@@ -71,8 +71,6 @@ from six.moves import input
 
 import google_auth_oauthlib.helpers
 
-from socketserver import TCPServer
-
 
 _LOGGER = logging.getLogger(__name__)
 

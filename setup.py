@@ -46,7 +46,7 @@ setup(
     python_requires=">=3.6",
     license="Apache 2.0",
     keywords="google auth oauth client oauthlib",
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
@@ -59,5 +59,5 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: OS Independent",
         "Topic :: Internet :: WWW/HTTP",
-    ),
+    ],
 )
