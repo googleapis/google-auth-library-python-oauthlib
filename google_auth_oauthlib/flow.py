@@ -119,8 +119,7 @@ class Flow(object):
             autogenerate_code_verifier (bool): If true, auto-generate a
                 code_verifier.
         .. _client secrets:
-            https://developers.google.com/api-client-library/python/guide
-            /aaa_client_secrets
+            https://github.com/googleapis/google-api-python-client/blob/master/docs/client-secrets.md
         """
         self.client_type = client_type
         """str: The client type, either ``'web'`` or ``'installed'``"""
