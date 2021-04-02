@@ -95,10 +95,10 @@ def default(session):
         CURRENT_DIRECTORY / "testing" / f"constraints-{session.python}.txt"
     )
     session.install("mock", "pytest", "pytest-cov", "click", "-c", constraints_path)
-    
-    
+
+
     session.install("-e", ".", "-c", constraints_path)
-    
+
 
     # Run py.test against the unit tests.
     session.run(
@@ -153,7 +153,7 @@ def system(session):
     # virtualenv's dist-packages.
     session.install("mock", "pytest", "google-cloud-testutils", "-c", constraints_path)
     session.install("-e", ".", "-c", constraints_path)
-    
+
 
     # Run py.test against the system tests.
     if system_test_exists:
@@ -183,7 +183,7 @@ def cover(session):
     test runs (not system test runs), and then erases coverage data.
     """
     session.install("coverage", "pytest-cov")
-    session.run("coverage", "report", "--show-missing", "--fail-under=99")
+    session.run("coverage", "report", "--show-missing", "--fail-under=96")
 
     session.run("coverage", "erase")
 
