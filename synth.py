@@ -19,3 +19,10 @@ s.replace(
     """BLACK_PATHS =.*""",
     """BLACK_PATHS = ["docs", "google_auth_oauthlib", "tests", "noxfile.py", "setup.py"]""",
 )
+
+# Change coverage path
+s.replace(
+    "noxfile.py",
+    '''["']--cov=google/cloud["'],''',
+    '''"--cov=google_auth_oauthlib",''',
+)
