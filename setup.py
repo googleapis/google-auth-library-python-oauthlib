@@ -18,16 +18,16 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-TOOL_DEPENDENCIES = "click"
+TOOL_DEPENDENCIES = "click>=6.0.0"
 
-DEPENDENCIES = ("google-auth", "requests-oauthlib>=0.7.0")
+DEPENDENCIES = ("google-auth>=1.0.0", "requests-oauthlib>=0.7.0")
 
 
 with io.open("README.rst", "r") as fh:
     long_description = fh.read()
 
 
-version = "0.4.2"
+version = "0.4.4"
 
 setup(
     name="google-auth-oauthlib",
