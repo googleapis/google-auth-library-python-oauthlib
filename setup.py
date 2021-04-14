@@ -31,7 +31,7 @@ version = "0.4.4"
 
 setup(
     name="google-auth-oauthlib",
-    version=version,
+    version=setuptools.sic(version),
     author="Google Cloud Platform",
     author_email="jonwayne+google-auth@google.com",
     description="Google Authentication Library",
