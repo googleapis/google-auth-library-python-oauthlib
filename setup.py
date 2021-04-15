@@ -14,9 +14,7 @@
 
 import io
 
-from setuptools import find_packages
-from setuptools import setup
-
+import setuptools
 
 TOOL_DEPENDENCIES = "click>=6.0.0"
 
@@ -29,7 +27,7 @@ with io.open("README.rst", "r") as fh:
 
 version = "0.4.4"
 
-setup(
+setuptools.setup(
     name="google-auth-oauthlib",
     version=setuptools.sic(version),
     author="Google Cloud Platform",
@@ -37,7 +35,7 @@ setup(
     description="Google Authentication Library",
     long_description=long_description,
     url="https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib",
-    packages=find_packages(exclude=("tests*",)),
+    packages=setuptools.find_packages(exclude=("tests*",)),
     install_requires=DEPENDENCIES,
     extras_require={"tool": TOOL_DEPENDENCIES},
     entry_points={
