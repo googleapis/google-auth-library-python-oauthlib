@@ -19,3 +19,5 @@ s.replace(
     """BLACK_PATHS =.*""",
     """BLACK_PATHS = ["docs", "google_auth_oauthlib", "tests", "noxfile.py", "setup.py"]""",
 )
+
+s.shell.run(["nox", "-s", "blacken"], hide_output=False)
