@@ -27,4 +27,10 @@ s.replace(
     'session.run("flake8", *BLACK_PATHS)',
 )
 
+s.replace(
+    "noxfile.py",
+    '"--cov=google/cloud",',
+    '"--cov=google_auth_oauthlib",',
+)
+
 s.shell.run(["nox", "-s", "blacken"], hide_output=False)
