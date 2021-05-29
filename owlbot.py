@@ -20,4 +20,11 @@ s.replace(
     """BLACK_PATHS = ["docs", "google_auth_oauthlib", "tests", "noxfile.py", "setup.py"]""",
 )
 
+# Change flake8 paths
+s.replace(
+    "noxfile.py",
+    'session.run\("flake8", "google", "tests"\)',
+    'session.run("flake8", *BLACK_PATHS)',
+)
+
 s.shell.run(["nox", "-s", "blacken"], hide_output=False)
