@@ -59,7 +59,7 @@ def lint(session):
     session.run(
         "black", "--check", *BLACK_PATHS,
     )
-    session.run("flake8", "google", "tests")
+    session.run("flake8", *BLACK_PATHS)
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION)
