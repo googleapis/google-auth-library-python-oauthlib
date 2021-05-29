@@ -167,7 +167,10 @@ class Flow(object):
         code_verifier = kwargs.pop("code_verifier", None)
         autogenerate_code_verifier = kwargs.pop("autogenerate_code_verifier", None)
 
-        session, client_config = google_auth_oauthlib.helpers.session_from_client_config(
+        (
+            session,
+            client_config,
+        ) = google_auth_oauthlib.helpers.session_from_client_config(
             client_config, scopes, **kwargs
         )
 
@@ -418,6 +421,7 @@ class InstalledAppFlow(Flow):
         authorization_prompt_message=_DEFAULT_AUTH_PROMPT_MESSAGE,
         success_message=_DEFAULT_WEB_SUCCESS_MESSAGE,
         open_browser=True,
+        redirect_uri_trailing_slash=True,
         **kwargs
     ):
         """Run the flow using the server strategy.
@@ -440,6 +444,8 @@ class InstalledAppFlow(Flow):
                 the authorization flow is complete.
             open_browser (bool): Whether or not to open the authorization URL
                 in the user's browser.
+            redirect_uri_trailing_slash (bool): whether or not to add trailing
+                slash when constructing the redirect_uri. Default value is True.
             kwargs: Additional keyword arguments passed through to
                 :meth:`authorization_url`.
 
@@ -448,11 +454,16 @@ class InstalledAppFlow(Flow):
                 for the user.
         """
         wsgi_app = _RedirectWSGIApp(success_message)
+        # Fail fast if the address is occupied
+        wsgiref.simple_server.WSGIServer.allow_reuse_address = False
         local_server = wsgiref.simple_server.make_server(
             host, port, wsgi_app, handler_class=_WSGIRequestHandler
         )
 
-        self.redirect_uri = "http://{}:{}/".format(host, local_server.server_port)
+        redirect_uri_format = (
+            "http://{}:{}/" if redirect_uri_trailing_slash else "http://{}:{}"
+        )
+        self.redirect_uri = redirect_uri_format.format(host, local_server.server_port)
         auth_url, _ = self.authorization_url(**kwargs)
 
         if open_browser:
@@ -466,6 +477,9 @@ class InstalledAppFlow(Flow):
         # OAuth 2.0 should only occur over https.
         authorization_response = wsgi_app.last_request_uri.replace("http", "https")
         self.fetch_token(authorization_response=authorization_response)
+
+        # This closes the socket
+        local_server.server_close()
 
         return self.credentials
 
@@ -508,6 +522,6 @@ class _RedirectWSGIApp(object):
         Returns:
             Iterable[bytes]: The response body.
         """
-        start_response("200 OK", [("Content-type", "text/plain")])
+        start_response("200 OK", [("Content-type", "text/plain; charset=utf-8")])
         self.last_request_uri = wsgiref.util.request_uri(environ)
         return [self._success_message.encode("utf-8")]
