@@ -152,8 +152,7 @@ class Flow(object):
                 format.
 
         .. _client secrets:
-            https://developers.google.com/api-client-library/python/guide
-            /aaa_client_secrets
+            https://github.com/googleapis/google-api-python-client/blob/master/docs/client-secrets.md
         """
         if "web" in client_config:
             client_type = "web"
