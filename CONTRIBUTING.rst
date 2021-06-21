@@ -69,6 +69,7 @@ We use `nox <https://nox.readthedocs.io/en/latest/>`__ to instrument our tests.
 
 - To test your changes, run unit tests with ``nox``::
 
+    $ nox -s unit-2.7
     $ nox -s unit-3.8
     $ ...
 
@@ -143,6 +144,7 @@ Running System Tests
 
    # Run all system tests
    $ nox -s system-3.8
+   $ nox -s system-2.7
 
    # Run a single system test
    $ nox -s system-3.8 -- -k <name of test>
@@ -150,8 +152,9 @@ Running System Tests
 
   .. note::
 
-      System tests are only configured to run under Python 3.8.
-      For expediency, we do not run them in older versions of Python 3.
+      System tests are only configured to run under Python 2.7 and
+      Python 3.8. For expediency, we do not run them in older versions
+      of Python 3.
 
   This alone will not run the tests. You'll need to change some local
   auth settings and change some configuration in your project to
