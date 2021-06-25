@@ -68,14 +68,12 @@ Using ``nox``
 We use `nox <https://nox.readthedocs.io/en/latest/>`__ to instrument our tests.
 
 - To test your changes, run unit tests with ``nox``::
+    $ nox -s unit
 
-    $ nox -s unit-3.8
-    $ ...
+- To run a single unit test::
 
-- Args to pytest can be passed through the nox command separated by a `--`. For
-  example, to run a single test::
+    $ nox -s unit-3.9 -- -k <name of test>
 
-    $ nox -s unit-3.8 -- -k <name of test>
 
   .. note::
 
@@ -142,7 +140,7 @@ Running System Tests
 - To run system tests, you can execute::
 
    # Run all system tests
-   $ nox -s system-3.8
+   $ nox -s system
 
    # Run a single system test
    $ nox -s system-3.8 -- -k <name of test>
@@ -150,7 +148,7 @@ Running System Tests
 
   .. note::
 
-      System tests are only configured to run under Python 3.8.
+      System tests are only configured to run under Python 2.7 and 3.8.
       For expediency, we do not run them in older versions of Python 3.
 
   This alone will not run the tests. You'll need to change some local
@@ -215,8 +213,8 @@ Supported versions can be found in our ``noxfile.py`` `config`_.
 .. _config: https://github.com/googleapis/google-auth-library-python-oauthlib/blob/master/noxfile.py
 
 
-We also explicitly decided to support Python 3 beginning with version
-3.6. Reasons for this include:
+We also explicitly decided to support Python 3 beginning with version 3.6.
+Reasons for this include:
 
 -  Encouraging use of newest versions of Python 3
 -  Taking the lead of `prominent`_ open-source `projects`_
