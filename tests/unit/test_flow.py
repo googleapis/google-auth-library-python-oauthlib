@@ -24,7 +24,7 @@ import socket
 import mock
 import pytest
 import requests
-from six.moves import urllib
+import urllib
 
 from google_auth_oauthlib import flow
 
