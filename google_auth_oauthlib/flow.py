@@ -15,7 +15,7 @@
 """OAuth 2.0 Authorization Flow
 
 This module provides integration with `requests-oauthlib`_ for running the
-`OAuth 2.0 Authorization Flow`_ and acquiring user credentials.  See 
+`OAuth 2.0 Authorization Flow`_ and acquiring user credentials.  See
 `Using OAuth 2.0 to Access Google APIs`_ for an overview of OAuth 2.0
 authorization scenarios Google APIs support.
 
