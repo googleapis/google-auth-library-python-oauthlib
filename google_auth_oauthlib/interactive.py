@@ -80,7 +80,9 @@ def find_open_port(start=8080, stop=None):
     return None
 
 
-def get_user_credentials(scopes, client_id, client_secret, minimum_port=8080, maximum_port=None):
+def get_user_credentials(
+    scopes, client_id, client_secret, minimum_port=8080, maximum_port=None
+):
     """Gets credentials associated with your Google user account.
 
     This function authenticates using your user credentials by going through

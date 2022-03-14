@@ -20,7 +20,7 @@ import pytest
 
 def test_find_open_port_finds_start_port(monkeypatch):
     from google_auth_oauthlib import interactive as module_under_test
-    
+
     monkeypatch.setattr(socket, "socket", mock.create_autospec(socket.socket))
     port = module_under_test.find_open_port(9999)
     assert port == 9999
@@ -28,7 +28,7 @@ def test_find_open_port_finds_start_port(monkeypatch):
 
 def test_find_open_port_finds_stop_port(monkeypatch):
     from google_auth_oauthlib import interactive as module_under_test
-    
+
     socket_instance = mock.create_autospec(socket.socket, instance=True)
 
     def mock_socket(family, type_):
@@ -84,13 +84,11 @@ def test_get_user_credentials_raises_connectionerror(monkeypatch):
         return None
 
     monkeypatch.setattr(module_under_test, "find_open_port", mock_find_open_port)
-    mock_flow = mock.create_autospec(
-        flow.InstalledAppFlow, instance=True
-    )
+    mock_flow = mock.create_autospec(flow.InstalledAppFlow, instance=True)
 
     with mock.patch(
         "google_auth_oauthlib.flow.InstalledAppFlow", autospec=True
-    ) as mock_flow,  pytest.raises(ConnectionError):
+    ) as mock_flow, pytest.raises(ConnectionError):
         mock_flow.from_client_config.return_value = mock_flow
         module_under_test.get_user_credentials(
             ["scopes"], "some-client-id", "shh-secret"
