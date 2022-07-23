@@ -1,103 +1,52 @@
-Python Client for Google Auth OAuthlib API
-==========================================
+oauthlib integration for Google Auth
+====================================
 
-|preview| |pypi| |versions|
+|pypi|
 
-`Google Auth OAuthlib API`_: 
+This library provides `oauthlib`_ integration with `google-auth`_.
 
-- `Client Library Documentation`_
-- `Product Documentation`_
-
-.. |preview| image:: https://img.shields.io/badge/support-preview-orange.svg
-   :target: https://github.com/googleapis/google-cloud-python/blob/main/README.rst#stability-levels
+.. |build| image:: https://travis-ci.org/googleapis/google-auth-library-python-oauthlib.svg?branch=main
+   :target: https://travis-ci.org/googleapis/google-auth-library-python-oauthlib
+.. |docs| image:: https://readthedocs.org/projects/google-auth-oauthlib/badge/?version=latest
+   :target: https://google-auth-oauthlib.readthedocs.io/en/latest/
 .. |pypi| image:: https://img.shields.io/pypi/v/google-auth-oauthlib.svg
-   :target: https://pypi.org/project/google-auth-oauthlib/
-.. |versions| image:: https://img.shields.io/pypi/pyversions/google-auth-oauthlib.svg
-   :target: https://pypi.org/project/google-auth-oauthlib/
-.. _Google Auth OAuthlib API: 
-.. _Client Library Documentation: https://cloud.google.com/python/docs/reference//latest
-.. _Product Documentation:  
+   :target: https://pypi.python.org/pypi/google-auth-oauthlib
 
-Quick Start
------------
+.. _oauthlib: https://github.com/idan/oauthlib
+.. _google-auth: https://github.com/googleapis/google-auth-library-python
 
-In order to use this library, you first need to go through the following steps:
+Installing
+----------
 
-1. `Select or create a Cloud Platform project.`_
-2. `Enable billing for your project.`_
-3. `Enable the Google Auth OAuthlib API.`_
-4. `Setup Authentication.`_
+You can install using `pip`_::
 
-.. _Select or create a Cloud Platform project.: https://console.cloud.google.com/project
-.. _Enable billing for your project.: https://cloud.google.com/billing/docs/how-to/modify-project#enable_billing_for_a_project
-.. _Enable the Google Auth OAuthlib API.:  
-.. _Setup Authentication.: https://googleapis.dev/python/google-api-core/latest/auth.html
+    $ pip install google-auth-oauthlib
 
-Installation
-~~~~~~~~~~~~
+.. _pip: https://pip.pypa.io/en/stable/
 
-Install this library in a `virtualenv`_ using pip. `virtualenv`_ is a tool to
-create isolated Python environments. The basic problem it addresses is one of
-dependencies and versions, and indirectly permissions.
+Documentation
+-------------
 
-With `virtualenv`_, it's possible to install this library without needing system
-install permissions, and without clashing with the installed system
-dependencies.
+The latest documentation is available at `google-auth-oauthlib.readthedocs.io`_.
 
-.. _`virtualenv`: https://virtualenv.pypa.io/en/latest/
-
-
-Code samples and snippets
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Code samples and snippets live in the `samples/` folder.
-
+.. _google-auth-oauthlib.readthedocs.io: http://google-auth-oauthlib.readthedocs.io/
 
 Supported Python Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^
-Our client libraries are compatible with all current [active](https://devguide.python.org/devcycle/#in-development-main-branch) and [maintenance](https://devguide.python.org/devcycle/#maintenance-branches) versions of
-Python.
+-------------------------
+Python >= 3.6
 
-Python >= 3.7
 
 Unsupported Python Versions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Python <= 3.6
+---------------------------
 
-If you are using an [end-of-life](https://devguide.python.org/devcycle/#end-of-life-branches)
-version of Python, we recommend that you update as soon as possible to an actively supported version.
+Python == 2.7, Python == 3.5.
 
+The last version of this library compatible with Python 2.7 and 3.5 is
+`google-auth-oauthlib==0.4.1`.
 
-Mac/Linux
-^^^^^^^^^
+License
+-------
 
-.. code-block:: console
+Apache 2.0 - See `the LICENSE`_ for more information.
 
-    pip install virtualenv
-    virtualenv <your-env>
-    source <your-env>/bin/activate
-    <your-env>/bin/pip install google-auth-oauthlib
-
-
-Windows
-^^^^^^^
-
-.. code-block:: console
-
-    pip install virtualenv
-    virtualenv <your-env>
-    <your-env>\Scripts\activate
-    <your-env>\Scripts\pip.exe install google-auth-oauthlib
-
-Next Steps
-~~~~~~~~~~
-
--  Read the `Client Library Documentation`_ for Google Auth OAuthlib API
-   to see other available methods on the client.
--  Read the `Google Auth OAuthlib API Product documentation`_ to learn
-   more about the product and see How-to Guides.
--  View this `README`_ to see the full list of Cloud
-   APIs that we cover.
-
-.. _Google Auth OAuthlib API Product documentation:  
-.. _README: https://github.com/googleapis/google-cloud-python/blob/main/README.rst
+.. _the LICENSE: https://github.com/googleapis/google-auth-library-python-oauthlib/blob/main/LICENSE
