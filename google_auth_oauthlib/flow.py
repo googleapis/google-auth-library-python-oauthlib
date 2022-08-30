@@ -52,6 +52,8 @@ from base64 import urlsafe_b64encode
 import hashlib
 import json
 import logging
+import random
+from urllib.parse import urlparse, parse_qs
 import warnings
 
 try:
@@ -75,6 +77,13 @@ _OOB_REDIRECT_URIS = [
     "urn:ietf:wg:oauth:2.0:oob:auto",
     "oob",
 ]
+
+def parse_code(uri):
+    parsed_url = urlparse(uri)
+    query_args = parse_qs(parsed_url.query)
+    code = query_args['code'][0]
+    return code
+
 
 
 class Flow(object):
@@ -370,14 +379,16 @@ class InstalledAppFlow(Flow):
         https://github.com/googleapis/google-api-python-client/blob/main/docs/oauth-installed.md
     """
 
-    _OOB_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
+    # _OOB_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
+    _PORT_NUMBER = random.randint(9000, 65000)
+    _OOB_REDIRECT_URI = f"http://localhost:{_PORT_NUMBER}"
 
     _DEFAULT_AUTH_PROMPT_MESSAGE = (
-        "Please visit this URL to authorize this application: {url}"
+        "Please visit this URL to authorize this application: \n\n{url}\n"
     )
     """str: The message to display when prompting the user for
     authorization."""
-    _DEFAULT_AUTH_CODE_MESSAGE = "Enter the authorization code: "
+    _DEFAULT_AUTH_CODE_MESSAGE = "Upon authorizing, your browser will attempt to load a local host site but will be unsuccessful and will indicate 'This site can't be reached'. In your browser's address bar, copy that URL and enter it below:\n"
     """str: The message to display when prompting the user for the
     authorization code. Used only by the console strategy."""
 
@@ -387,7 +398,7 @@ class InstalledAppFlow(Flow):
 
     def run_console(
         self,
-        authorization_prompt_message=_DEFAULT_AUTH_PROMPT_MESSAGE,
+        authorization_prompt_message="RC" + _DEFAULT_AUTH_PROMPT_MESSAGE,
         authorization_code_message=_DEFAULT_AUTH_CODE_MESSAGE,
         **kwargs
     ):
@@ -435,7 +446,7 @@ class InstalledAppFlow(Flow):
         print(authorization_prompt_message.format(url=auth_url))
 
         code = input(authorization_code_message)
-
+        code = parse_code(code)
         self.fetch_token(code=code)
 
         return self.credentials
@@ -445,7 +456,7 @@ class InstalledAppFlow(Flow):
         host="localhost",
         bind_addr=None,
         port=8080,
-        authorization_prompt_message=_DEFAULT_AUTH_PROMPT_MESSAGE,
+        authorization_prompt_message="RL" + _DEFAULT_AUTH_PROMPT_MESSAGE,
         success_message=_DEFAULT_WEB_SUCCESS_MESSAGE,
         open_browser=True,
         redirect_uri_trailing_slash=True,
