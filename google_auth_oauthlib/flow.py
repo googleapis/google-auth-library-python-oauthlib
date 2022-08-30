@@ -78,12 +78,12 @@ _OOB_REDIRECT_URIS = [
     "oob",
 ]
 
+
 def parse_code(uri):
     parsed_url = urlparse(uri)
     query_args = parse_qs(parsed_url.query)
-    code = query_args['code'][0]
+    code = query_args["code"][0]
     return code
-
 
 
 class Flow(object):
@@ -400,7 +400,7 @@ class InstalledAppFlow(Flow):
         self,
         authorization_prompt_message="RC" + _DEFAULT_AUTH_PROMPT_MESSAGE,
         authorization_code_message=_DEFAULT_AUTH_CODE_MESSAGE,
-        **kwargs
+        **kwargs,
     ):
         """Run the flow using the console strategy.
 
@@ -460,7 +460,7 @@ class InstalledAppFlow(Flow):
         success_message=_DEFAULT_WEB_SUCCESS_MESSAGE,
         open_browser=True,
         redirect_uri_trailing_slash=True,
-        **kwargs
+        **kwargs,
     ):
         """Run the flow using the server strategy.
 
