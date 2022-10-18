@@ -126,7 +126,7 @@ def credentials_from_session(session, client_config=None):
             "There is no access token for this session, did you call " "fetch_token?"
         )
 
-    if client_config.get("3pi"):
+    if "3pi" in client_config:
         credentials = external_account_authorized_user.Credentials(
             token=session.token["access_token"],
             refresh_token=session.token.get("refresh_token"),
