@@ -127,7 +127,7 @@ def credentials_from_session(session, client_config=None):
         )
 
     if client_config.get("3pi"):
-        credentials = google.auth.external_account_authorized_user.Credentials(
+        credentials = external_account_authorized_user.Credentials(
             token=session.token["access_token"],
             refresh_token=session.token.get("refresh_token"),
             token_url=client_config.get("token_uri"),

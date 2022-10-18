@@ -110,7 +110,7 @@ def test_credentials_from_session_3pi(session):
     credentials = helpers.credentials_from_session(session, client_secrets_info)
 
     assert isinstance(
-        credentials, google.auth.external_account_authorized_user.Credentials
+        credentials, external_account_authorized_user.Credentials
     )
     assert credentials.token == mock.sentinel.access_token
     assert credentials.expiry == datetime.datetime(1990, 5, 29, 8, 20, 0)
