@@ -109,9 +109,7 @@ def test_credentials_from_session_3pi(session):
     client_secrets_info["3pi"] = True
     credentials = helpers.credentials_from_session(session, client_secrets_info)
 
-    assert isinstance(
-        credentials, external_account_authorized_user.Credentials
-    )
+    assert isinstance(credentials, external_account_authorized_user.Credentials)
     assert credentials.token == mock.sentinel.access_token
     assert credentials.expiry == datetime.datetime(1990, 5, 29, 8, 20, 0)
     assert credentials._refresh_token == mock.sentinel.refresh_token
