@@ -449,6 +449,7 @@ class InstalledAppFlow(Flow):
         success_message=_DEFAULT_WEB_SUCCESS_MESSAGE,
         open_browser=True,
         redirect_uri_trailing_slash=True,
+        timeout_seconds=None,
         **kwargs
     ):
         """Run the flow using the server strategy.
@@ -502,7 +503,8 @@ class InstalledAppFlow(Flow):
             webbrowser.open(auth_url, new=1, autoraise=True)
 
         print(authorization_prompt_message.format(url=auth_url))
-
+        
+        local_server.timeout = timeout_seconds
         local_server.handle_request()
 
         # Note: using https here because oauthlib is very picky that
