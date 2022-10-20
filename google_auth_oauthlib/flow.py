@@ -479,8 +479,9 @@ class InstalledAppFlow(Flow):
                 in the user's browser.
             redirect_uri_trailing_slash (bool): whether or not to add trailing
                 slash when constructing the redirect_uri. Default value is True.
-            timeout_seconds (int): It will raise an error after the timeout timing 
-                if there are no credentials response. The value is in seconds. 
+            timeout_seconds (int): It will raise an error after the timeout timing
+                if there are no credentials response. The value is in seconds.
+                When set to None there is no timeout.
                 Default value is None.
             kwargs: Additional keyword arguments passed through to
                 :meth:`authorization_url`.
