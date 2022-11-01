@@ -95,6 +95,7 @@ def test_credentials_from_session(session):
     assert credentials._client_id == CLIENT_SECRETS_INFO["web"]["client_id"]
     assert credentials._client_secret == CLIENT_SECRETS_INFO["web"]["client_secret"]
     assert credentials._token_uri == CLIENT_SECRETS_INFO["web"]["token_uri"]
+    assert credentials.scopes == session.scope
 
 
 def test_credentials_from_session_3pi(session):
@@ -122,6 +123,7 @@ def test_credentials_from_session_3pi(session):
     assert (
         credentials._token_info_url == "https://accounts.google.com/o/oauth2/introspect"
     )
+    assert credentials.scopes == session.scope
 
 
 def test_bad_credentials(session):
