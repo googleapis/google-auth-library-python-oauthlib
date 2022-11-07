@@ -41,7 +41,7 @@ Here's an example of using :class:`InstalledAppFlow`::
     print(profile_info)
     # {'name': '...',  'email': '...', ...}
 
-.. _requests-oauthlib: http://requests-oauthlib.readthedocs.io/en/stable/
+.. _requests-oauthlib: http://requests-oauthlib.readthedocs.io/en/latest/
 .. _OAuth 2.0 Authorization Flow:
     https://tools.ietf.org/html/rfc6749#section-1.2
 .. _Using OAuth 2.0 to Access Google APIs:
@@ -445,11 +445,13 @@ class InstalledAppFlow(Flow):
     def run_local_server(
         self,
         host="localhost",
+        bind_addr=None,
         port=8080,
         authorization_prompt_message=_DEFAULT_AUTH_PROMPT_MESSAGE,
         success_message=_DEFAULT_WEB_SUCCESS_MESSAGE,
         open_browser=True,
         redirect_uri_trailing_slash=True,
+        timeout_seconds=None,
         **kwargs
     ):
         """Run the flow using the server strategy.
@@ -465,6 +467,11 @@ class InstalledAppFlow(Flow):
         Args:
             host (str): The hostname for the local redirect server. This will
                 be served over http, not https.
+            bind_addr (str): Optionally provide an ip address for the redirect
+                server to listen on when it is not the same as host
+                (e.g. in a container). Default value is None,
+                which means that the redirect server will listen
+                on the ip address specified in the host parameter.
             port (int): The port for the local redirect server.
             authorization_prompt_message (str | None): The message to display to tell
                 the user to navigate to the authorization URL. If None or empty,
@@ -475,6 +482,10 @@ class InstalledAppFlow(Flow):
                 in the user's browser.
             redirect_uri_trailing_slash (bool): whether or not to add trailing
                 slash when constructing the redirect_uri. Default value is True.
+            timeout_seconds (int): It will raise an error after the timeout timing
+                if there are no credentials response. The value is in seconds.
+                When set to None there is no timeout.
+                Default value is None.
             kwargs: Additional keyword arguments passed through to
                 :meth:`authorization_url`.
 
@@ -486,7 +497,7 @@ class InstalledAppFlow(Flow):
         # Fail fast if the address is occupied
         wsgiref.simple_server.WSGIServer.allow_reuse_address = False
         local_server = wsgiref.simple_server.make_server(
-            host, port, wsgi_app, handler_class=_WSGIRequestHandler
+            bind_addr or host, port, wsgi_app, handler_class=_WSGIRequestHandler
         )
 
         redirect_uri_format = (
@@ -501,6 +512,7 @@ class InstalledAppFlow(Flow):
         if authorization_prompt_message:
             print(authorization_prompt_message.format(url=auth_url))
 
+        local_server.timeout = timeout_seconds
         local_server.handle_request()
 
         # Note: using https here because oauthlib is very picky that

@@ -18,12 +18,13 @@ This module provides helpers for integrating with `requests-oauthlib`_.
 Typically, you'll want to use the higher-level helpers in
 :mod:`google_auth_oauthlib.flow`.
 
-.. _requests-oauthlib: http://requests-oauthlib.readthedocs.io/en/stable/
+.. _requests-oauthlib: http://requests-oauthlib.readthedocs.io/en/latest/
 """
 
 import datetime
 import json
 
+from google.auth import external_account_authorized_user
 import google.oauth2.credentials
 import requests_oauthlib
 
@@ -125,14 +126,25 @@ def credentials_from_session(session, client_config=None):
             "There is no access token for this session, did you call " "fetch_token?"
         )
 
-    credentials = google.oauth2.credentials.Credentials(
-        session.token["access_token"],
-        refresh_token=session.token.get("refresh_token"),
-        id_token=session.token.get("id_token"),
-        token_uri=client_config.get("token_uri"),
-        client_id=client_config.get("client_id"),
-        client_secret=client_config.get("client_secret"),
-        scopes=session.scope,
-    )
+    if "3pi" in client_config:
+        credentials = external_account_authorized_user.Credentials(
+            token=session.token["access_token"],
+            refresh_token=session.token.get("refresh_token"),
+            token_url=client_config.get("token_uri"),
+            client_id=client_config.get("client_id"),
+            client_secret=client_config.get("client_secret"),
+            token_info_url=client_config.get("token_info_url"),
+            scopes=session.scope,
+        )
+    else:
+        credentials = google.oauth2.credentials.Credentials(
+            session.token["access_token"],
+            refresh_token=session.token.get("refresh_token"),
+            id_token=session.token.get("id_token"),
+            token_uri=client_config.get("token_uri"),
+            client_id=client_config.get("client_id"),
+            client_secret=client_config.get("client_secret"),
+            scopes=session.scope,
+        )
     credentials.expiry = datetime.datetime.utcfromtimestamp(session.token["expires_at"])
     return credentials
