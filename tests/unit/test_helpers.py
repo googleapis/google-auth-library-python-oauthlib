@@ -96,7 +96,7 @@ def test_credentials_from_session(session):
     assert credentials._client_secret == CLIENT_SECRETS_INFO["web"]["client_secret"]
     assert credentials._token_uri == CLIENT_SECRETS_INFO["web"]["token_uri"]
     assert credentials.scopes == session.scope
-    assert credentials.granted_scopes == None
+    assert credentials.granted_scopes is None
 
 
 def test_credentials_from_session_granted_scopes(session):
