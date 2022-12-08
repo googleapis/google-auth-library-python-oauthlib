@@ -389,6 +389,7 @@ class InstalledAppFlow(Flow):
         self,
         authorization_prompt_message=_DEFAULT_AUTH_PROMPT_MESSAGE,
         authorization_code_message=_DEFAULT_AUTH_CODE_MESSAGE,
+        redirect_uri=None,
         **kwargs
     ):
         """Run the flow using the console strategy.
@@ -429,7 +430,10 @@ class InstalledAppFlow(Flow):
             DeprecationWarning,
         )
 
-        self.redirect_uri = self._OOB_REDIRECT_URI
+        if redirect_uri:
+            self.redirect_uri = redirect_uri
+        else:
+            self.redirect_uri = self._OOB_REDIRECT_URI
 
         auth_url, _ = self.authorization_url(**kwargs)
 
