@@ -52,7 +52,6 @@ from base64 import urlsafe_b64encode
 import hashlib
 import json
 import logging
-import warnings
 
 try:
     from secrets import SystemRandom
@@ -70,11 +69,6 @@ import google_auth_oauthlib.helpers
 
 
 _LOGGER = logging.getLogger(__name__)
-_OOB_REDIRECT_URIS = [
-    "urn:ietf:wg:oauth:2.0:oob",
-    "urn:ietf:wg:oauth:2.0:oob:auto",
-    "oob",
-]
 
 
 class Flow(object):
@@ -214,14 +208,8 @@ class Flow(object):
 
     @redirect_uri.setter
     def redirect_uri(self, value):
-        if value in _OOB_REDIRECT_URIS:
-            raise ValueError(
-                "'{}' is an OOB redirect URI. Support for OAuth out-of-band (OOB) flow was dropped on Oct 3, 2022. "
-                "Migrate to an alternative flow. "
-                "See https://developers.googleblog.com/2022/02/making-oauth-flows-safer.html?m=1#disallowed-oob".format(
-                    value
-                )
-            )
+        """The OAuth 2.0 redirect URI. Pass-through to
+        ``self.oauth2session.redirect_uri``."""
         self.oauth2session.redirect_uri = value
 
     def authorization_url(self, **kwargs):
