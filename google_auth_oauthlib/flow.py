@@ -379,6 +379,7 @@ class InstalledAppFlow(Flow):
         redirect_uri_trailing_slash=True,
         timeout_seconds=None,
         token_audience=None,
+        browser=None,
         **kwargs
     ):
         """Run the flow using the server strategy.
@@ -437,7 +438,8 @@ class InstalledAppFlow(Flow):
         auth_url, _ = self.authorization_url(**kwargs)
 
         if open_browser:
-            webbrowser.open(auth_url, new=1, autoraise=True)
+            # if browser is None it defaults to default browser
+            webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
 
         if authorization_prompt_message:
             print(authorization_prompt_message.format(url=auth_url))
