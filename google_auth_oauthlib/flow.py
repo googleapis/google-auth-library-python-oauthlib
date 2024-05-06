@@ -222,7 +222,8 @@ class Flow(object):
         :meth:`requests_oauthlib.OAuth2Session.authorization_url`
         and specifies the client configuration's authorization URI (usually
         Google's authorization server) and specifies that "offline" access is
-        desired. This is required in order to obtain a refresh token.
+        desired and requests the consent page is re-presented to the user.
+        This is required in order to obtain a refresh token.
 
         Args:
             kwargs: Additional arguments passed through to
@@ -237,6 +238,7 @@ class Flow(object):
                 specify the ``state`` when constructing the :class:`Flow`.
         """
         kwargs.setdefault("access_type", "offline")
+        kwargs.setdefault("prompt", "consent")
         if self.autogenerate_code_verifier:
             chars = ascii_letters + digits + "-._~"
             rnd = SystemRandom()
