@@ -160,7 +160,7 @@ class Flow(object):
 
         # these args cannot be passed to requests_oauthlib.OAuth2Session
         code_verifier = kwargs.pop("code_verifier", None)
-        autogenerate_code_verifier = kwargs.pop("autogenerate_code_verifier", None)
+        autogenerate_code_verifier = kwargs.pop("autogenerate_code_verifier", True)
 
         (
             session,
