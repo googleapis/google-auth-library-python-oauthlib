@@ -69,6 +69,7 @@ import google_auth_oauthlib.helpers
 
 
 _LOGGER = logging.getLogger(__name__)
+_LOGGER.setLevel(logging.INFO)
 
 
 class Flow(object):
@@ -447,6 +448,7 @@ class InstalledAppFlow(Flow):
                 webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
 
             if authorization_prompt_message:
+                _LOGGER.info(authorization_prompt_message.format(url=auth_url))
                 print(authorization_prompt_message.format(url=auth_url))
 
             local_server.timeout = timeout_seconds
