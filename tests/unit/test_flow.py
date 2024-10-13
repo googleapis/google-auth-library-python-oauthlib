@@ -115,10 +115,14 @@ class TestFlow(object):
 
             assert CLIENT_SECRETS_INFO["web"]["auth_uri"] in url
             assert scope in url
+            assert "code_challenge=" in url
+            assert "code_challenge_method=S256" in url
             authorization_url_spy.assert_called_with(
                 CLIENT_SECRETS_INFO["web"]["auth_uri"],
                 access_type="offline",
                 prompt="consent",
+                code_challenge=mock.ANY,
+                code_challenge_method="S256",
             )
 
     def test_authorization_url_code_verifier(self, instance):
@@ -184,10 +188,10 @@ class TestFlow(object):
             assert kwargs["code_challenge_method"] == "S256"
             assert len(instance.code_verifier) == 128
             assert len(kwargs["code_challenge"]) == 43
-            valid_verifier = r"^[A-Za-z0-9-._~]*$"
-            valid_challenge = r"^[A-Za-z0-9-_]*$"
-            assert re.match(valid_verifier, instance.code_verifier)
-            assert re.match(valid_challenge, kwargs["code_challenge"])
+            valid_verifier = r"^[A-Za-z0-9-._~]{128}$"
+            valid_challenge = r"^[A-Za-z0-9-._~]{43}$"
+            assert re.fullmatch(valid_verifier, instance.code_verifier)
+            assert re.fullmatch(valid_challenge, kwargs["code_challenge"])
 
     def test_fetch_token(self, instance):
         instance.code_verifier = "amanaplanacanalpanama"
@@ -307,13 +311,15 @@ class TestInstalledAppFlow(object):
         assert credentials.id_token == mock.sentinel.id_token
         assert webbrowser_mock.get().open.called
         assert instance.redirect_uri == f"http://localhost:{port}/"
+        valid_verifier = r"^[A-Za-z0-9-._~]{128}$"
+        assert re.fullmatch(valid_verifier, instance.code_verifier)
 
         expected_auth_response = auth_redirect_url.replace("http", "https")
         mock_fetch_token.assert_called_with(
             CLIENT_SECRETS_INFO["web"]["token_uri"],
             client_secret=CLIENT_SECRETS_INFO["web"]["client_secret"],
             authorization_response=expected_auth_response,
-            code_verifier=None,
+            code_verifier=mock.ANY,
             audience=None,
         )
 
@@ -352,7 +358,7 @@ class TestInstalledAppFlow(object):
             CLIENT_SECRETS_INFO["web"]["token_uri"],
             client_secret=CLIENT_SECRETS_INFO["web"]["client_secret"],
             authorization_response=expected_auth_response,
-            code_verifier=None,
+            code_verifier=mock.ANY,
             audience=self.AUDIENCE,
         )
 
