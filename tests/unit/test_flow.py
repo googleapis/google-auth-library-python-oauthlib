@@ -189,7 +189,7 @@ class TestFlow(object):
             assert len(instance.code_verifier) == 128
             assert len(kwargs["code_challenge"]) == 43
             valid_verifier = r"^[A-Za-z0-9-._~]{128}$"
-            valid_challenge = r"^[A-Za-z0-9-._~]{43}$"
+            valid_challenge = r"^[A-Za-z0-9-_]{43}$"
             assert re.fullmatch(valid_verifier, instance.code_verifier)
             assert re.fullmatch(valid_challenge, kwargs["code_challenge"])
 
