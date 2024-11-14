@@ -5,7 +5,7 @@ on:
 name: unittest
 jobs:
   unit:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
@@ -26,7 +26,7 @@ jobs:
       run: |
         nox -s unit-${{ matrix.python }}
     - name: Upload coverage results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-artifacts
         path: .coverage-${{ matrix.python }}
@@ -48,7 +48,7 @@ jobs:
         python -m pip install --upgrade setuptools pip wheel
         python -m pip install coverage
     - name: Download coverage results
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: coverage-artifacts
         path: .coverage-results/
