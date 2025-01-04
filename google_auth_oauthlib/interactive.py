@@ -91,10 +91,12 @@ def get_user_credentials(
     you've provided.
 
     To obtain the ``client_id`` and ``client_secret``, create an **OAuth
-    client ID** with application type **Other** from the `Credentials page on
+    client ID** with application type **Web Application** from the `Credentials page on
     the Google Developer's Console
-    <https://console.developers.google.com/apis/credentials>`_. Learn more
-    with the `Authenticating as an end user
+    <https://console.developers.google.com/apis/credentials>`_.
+    You may want to check the `OAuth 2.0 docs for Web Apps 
+    <https://developers.google.com/identity/protocols/oauth2/web-server`_.
+    Learn more with the `Authenticating as an end user
     <https://cloud.google.com/docs/authentication/end-user>`_ guide.
 
     Args:
