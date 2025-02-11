@@ -251,8 +251,7 @@ class TestInstalledAppFlow(object):
             CLIENT_SECRETS_INFO, scopes=self.SCOPES
         )
 
-
-    def is_port_in_use(self, port, host='localhost'):
+    def is_port_in_use(self, port, host="localhost"):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             return s.connect_ex((host, port)) == 0
 
