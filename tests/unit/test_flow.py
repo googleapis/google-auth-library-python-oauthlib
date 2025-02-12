@@ -20,8 +20,8 @@ import os
 import re
 import random
 import socket
+from unittest import mock
 
-import mock
 import pytest
 import requests
 import urllib
