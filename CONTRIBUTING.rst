@@ -72,7 +72,7 @@ We use `nox <https://nox.readthedocs.io/en/latest/>`__ to instrument our tests.
 
 - To run a single unit test::
 
-    $ nox -s unit-3.12 -- -k <name of test>
+    $ nox -s unit-3.13 -- -k <name of test>
 
 
   .. note::
