@@ -15,6 +15,7 @@ templated_files = common.py_library(
 s.move(templated_files, excludes=[
     "docs/multiprocessing.rst",
     "README.rst",
+    ".kokoro/samples/**", # this repository has no samples
 ])
 
 # Change black paths
