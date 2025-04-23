@@ -18,7 +18,6 @@ from functools import partial
 import json
 import os
 import re
-import random
 import socket
 from unittest import mock
 
@@ -256,9 +255,10 @@ class TestInstalledAppFlow(object):
         # Creating a new server at the same port will result in
         # a 'Address already in use' error for a brief
         # period of time after the socket has been closed.
-        # Work around this in the tests by choosing a random port.
-        # https://stackoverflow.com/questions/6380057/python-binding-socket-address-already-in-use
-        yield random.randrange(60400, 60900)
+        # Work around this in the tests by letting the OS pick an available port each time.
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind(("localhost", 0))
+            return s.getsockname()[1]
 
     @pytest.fixture
     def socket(self, port):
