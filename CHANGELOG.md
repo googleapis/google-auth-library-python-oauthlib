@@ -4,6 +4,25 @@
 
 [1]: https://pypi.org/project/google-auth-oauthlib/#history
 
+## [1.3.0](https://github.com/googleapis/google-cloud-python/compare/google-auth-oauthlib-v1.2.2...google-auth-oauthlib-v1.3.0) (2025-10-28)
+
+
+### Features
+
+* onboard to librarian  ([8c7ccb9bf98260912393c680308720ab22c315ed](https://github.com/googleapis/google-cloud-python/commit/8c7ccb9bf98260912393c680308720ab22c315ed))
+
+
+### Bug Fixes
+
+* explicitly declare Python 3.13 support (#408) * fix: explicitly delare Python 3.13 support
+* add constraints
+* 🦉 Updates from OwlBot post-processor
+See https://github.com/googleapis/repo-automation-bots/blob/main/packages/owl-bot/README.md
+* 🦉 Updates from OwlBot post-processor
+See https://github.com/googleapis/repo-automation-bots/blob/main/packages/owl-bot/README.md
+* remove .kokoro/samples since there are no samples
+--------- ([4b1a5f33f282af79999d7ed80d11a246a7e301a2](https://github.com/googleapis/google-cloud-python/commit/4b1a5f33f282af79999d7ed80d11a246a7e301a2))
+
 ## [1.2.2](https://github.com/googleapis/google-auth-library-python-oauthlib/compare/v1.2.1...v1.2.2) (2025-04-01)
 
 
