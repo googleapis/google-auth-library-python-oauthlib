@@ -43,7 +43,7 @@ s.replace(
 # Skip Cpp Unittest in 3.11, 3.12, 3.13, and 3.14
 s.replace(
     "noxfile.py",
-    '''session.python in ("3.11", "3.12", "3.13")''',
+    '''session.python in \("3.11", "3.12", "3.13"\)''',
     '''session.python in ("3.11", "3.12", "3.13", "3.14")'''
 )
 
