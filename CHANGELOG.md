@@ -4,6 +4,13 @@
 
 [1]: https://pypi.org/project/google-auth-oauthlib/#history
 
+## [1.3.0](https://github.com/googleapis/google-cloud-python/compare/google-auth-oauthlib-v1.2.3...google-auth-oauthlib-v1.3.0) (2025-11-17)
+
+
+### Features
+
+* generate libraries ([4359857d98229bbda0e4767fe04d4ada3e7b4ddf](https://github.com/googleapis/google-cloud-python/commit/4359857d98229bbda0e4767fe04d4ada3e7b4ddf))
+
 ## [1.2.3](https://github.com/googleapis/google-auth-library-python-oauthlib/compare/v1.2.2...v1.2.3) (2025-10-30)
 
 
