@@ -24,7 +24,7 @@ DEPENDENCIES = (
     # Exclude google-auth 2.43.0, 2.44.0, 2.45.0 due to an incompatibility.
     # See: https://github.com/googleapis/google-auth-library-python-oauthlib/issues/422
     "google-auth>=2.15.0,<3.0.0,!=2.43.0,!=2.44.0,!=2.45.0",
-    "requests-oauthlib>=0.7.0"
+    "requests-oauthlib>=0.7.0",
 )
 
 
