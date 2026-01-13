@@ -32,7 +32,7 @@ BLACK_VERSION = "black[jupyter]==23.7.0"
 ISORT_VERSION = "isort==5.11.0"
 LINT_PATHS = ["docs", "google_auth_oauthlib", "tests", "noxfile.py", "setup.py"]
 
-DEFAULT_PYTHON_VERSION = "3.10"
+DEFAULT_PYTHON_VERSION = "3.14"
 SYSTEM_TEST_PYTHON_VERSIONS: List[str] = ["3.10"]
 
 # TODO(https://github.com/googleapis/google-auth-library-python-oauthlib/issues/410):
@@ -385,7 +385,7 @@ def docfx(session):
     )
 
 
-@nox.session(python="3.13")
+@nox.session(python=DEFAULT_PYTHON_VERSION)
 @nox.parametrize(
     "protobuf_implementation",
     ["python", "upb", "cpp"],
