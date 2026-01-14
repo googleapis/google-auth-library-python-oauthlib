@@ -33,7 +33,6 @@ ISORT_VERSION = "isort==5.11.0"
 LINT_PATHS = ["docs", "google_auth_oauthlib", "tests", "noxfile.py", "setup.py"]
 
 DEFAULT_PYTHON_VERSION = "3.14"
-SYSTEM_TEST_PYTHON_VERSIONS: List[str] = ["3.10"]
 
 # TODO(https://github.com/googleapis/google-auth-library-python-oauthlib/issues/410):
 # Remove or restore testing for Python 3.7/3.8
@@ -248,7 +247,7 @@ def install_systemtest_dependencies(session, *constraints):
         session.install("-e", ".", *constraints)
 
 
-@nox.session(python=SYSTEM_TEST_PYTHON_VERSIONS)
+@nox.session(python=DEFAULT_PYTHON_VERSION)
 def system(session):
     """Run the system test suite."""
     constraints_path = str(
