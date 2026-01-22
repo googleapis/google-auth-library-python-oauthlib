@@ -20,19 +20,19 @@ from setuptools import setup
 
 TOOL_DEPENDENCIES = "click>=6.0.0"
 
-# TODO(https://github.com/googleapis/google-auth-library-python-oauthlib/issues/422): google-auth 2.42.0
-# introduces a change that isn't compatible with
-# google-auth-oauthlib.
-# Specifically https://github.com/googleapis/google-auth-library-python/commit/36ecb1d65883477d27faf9c2281fc289659b9903
-# which results in the unit tests to fail. Remove the upper bound once the issue is resolved.
-DEPENDENCIES = ("google-auth>=2.15.0,<2.42.0", "requests-oauthlib>=0.7.0")
+DEPENDENCIES = (
+    # Exclude google-auth 2.43.0, 2.44.0, 2.45.0 due to an incompatibility.
+    # See: https://github.com/googleapis/google-auth-library-python-oauthlib/issues/422
+    "google-auth>=2.15.0,<3.0.0,!=2.43.0,!=2.44.0,!=2.45.0",
+    "requests-oauthlib>=0.7.0",
+)
 
 
 with io.open("README.rst", "r") as fh:
     long_description = fh.read()
 
 
-version = "1.2.3"
+version = "1.2.4"
 
 setup(
     name="google-auth-oauthlib",
