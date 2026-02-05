@@ -37,6 +37,7 @@ with open(CLIENT_SECRETS_FILE, "r") as fh:
 VALID_PKCE_VERIFIER_REGEX = r"^[A-Za-z0-9-._~]{128}$"
 VALID_CODE_CHALLENGE_REGEX = r"^[A-Za-z0-9-_]{43}$"
 
+
 class TestFlow(object):
     def test_from_client_secrets_file(self):
         instance = flow.Flow.from_client_secrets_file(
