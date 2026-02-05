@@ -312,7 +312,7 @@ class TestInstalledAppFlow(object):
         assert credentials.id_token == mock.sentinel.id_token
         assert webbrowser_mock.get().open.called
         assert instance.redirect_uri == f"http://localhost:{port}/"
-        assert re.fullmatch(VALID_CODE_CHALLENGE_REGEX, instance.code_verifier)
+        assert re.fullmatch(VALID_PKCE_VERIFIER_REGEX, instance.code_verifier)
         expected_auth_response = auth_redirect_url.replace("http", "https")
         mock_fetch_token.assert_called_with(
             CLIENT_SECRETS_INFO["web"]["token_uri"],
