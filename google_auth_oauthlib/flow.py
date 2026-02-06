@@ -69,7 +69,6 @@ import google_auth_oauthlib.helpers
 
 
 _LOGGER = logging.getLogger(__name__)
-_LOGGER.setLevel(logging.INFO)
 
 
 class Flow(object):
