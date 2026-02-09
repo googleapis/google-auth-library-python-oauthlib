@@ -16,6 +16,7 @@ import concurrent.futures
 import datetime
 from functools import partial
 import json
+import logging
 import os
 import re
 import socket
@@ -460,3 +461,38 @@ class TestInstalledAppFlow(object):
             instance.run_local_server()
 
         server_mock.server_close.assert_called_once()
+
+    @mock.patch("builtins.print")
+    @mock.patch("google_auth_oauthlib.flow.webbrowser", autospec=True)
+    def test_run_local_server_logs_and_prints_url(
+        self, webbrowser_mock, print_mock, instance, mock_fetch_token, port, caplog
+    ):
+        auth_redirect_url = urllib.parse.urljoin(
+            f"http://localhost:{port}", self.REDIRECT_REQUEST_PATH
+        )
+
+        # Configure caplog to capture INFO logs
+        caplog.set_level(logging.INFO, logger="google_auth_oauthlib.flow")
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(partial(instance.run_local_server, port=port))
+
+            while not future.done():
+                try:
+                    requests.get(auth_redirect_url)
+                except requests.ConnectionError:
+                    pass
+
+            future.result()
+
+        # Verify log message
+        assert "Please visit this URL" in caplog.text
+        assert urllib.parse.quote(instance.redirect_uri, safe="") in caplog.text
+
+        # Verify print message
+        print_mock.assert_called_once()
+        assert "Please visit this URL" in print_mock.call_args[0][0]
+        assert (
+            urllib.parse.quote(instance.redirect_uri, safe="")
+            in print_mock.call_args[0][0]
+        )
