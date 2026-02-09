@@ -492,4 +492,7 @@ class TestInstalledAppFlow(object):
         # Verify print message
         print_mock.assert_called_once()
         assert "Please visit this URL" in print_mock.call_args[0][0]
-        assert urllib.parse.quote(instance.redirect_uri, safe="") in print_mock.call_args[0][0]
+        assert (
+            urllib.parse.quote(instance.redirect_uri, safe="")
+            in print_mock.call_args[0][0]
+        )
