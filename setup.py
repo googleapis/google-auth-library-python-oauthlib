@@ -20,14 +20,19 @@ from setuptools import setup
 
 TOOL_DEPENDENCIES = "click>=6.0.0"
 
-DEPENDENCIES = ("google-auth>=2.15.0", "requests-oauthlib>=0.7.0")
+DEPENDENCIES = (
+    # Exclude google-auth 2.43.0, 2.44.0, 2.45.0 due to an incompatibility.
+    # See: https://github.com/googleapis/google-auth-library-python-oauthlib/issues/422
+    "google-auth>=2.15.0,<3.0.0,!=2.43.0,!=2.44.0,!=2.45.0",
+    "requests-oauthlib>=0.7.0",
+)
 
 
 with io.open("README.rst", "r") as fh:
     long_description = fh.read()
 
 
-version = "1.2.0"
+version = "1.2.4"
 
 setup(
     name="google-auth-oauthlib",
@@ -37,7 +42,13 @@ setup(
     description="Google Authentication Library",
     long_description=long_description,
     url="https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib",
-    packages=find_namespace_packages(exclude=("tests*",)),
+    packages=find_namespace_packages(
+        exclude=(
+            "docs*",
+            "scripts*",
+            "tests*",
+        )
+    ),
     install_requires=DEPENDENCIES,
     extras_require={"tool": TOOL_DEPENDENCIES},
     entry_points={
@@ -45,18 +56,19 @@ setup(
             "google-oauthlib-tool" "=google_auth_oauthlib.tool.__main__:main [tool]"
         ]
     },
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     license="Apache 2.0",
     keywords="google auth oauth client oauthlib",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
