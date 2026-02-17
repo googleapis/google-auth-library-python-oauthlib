@@ -410,8 +410,9 @@ class InstalledAppFlow(Flow):
                 in the user's browser.
             redirect_uri_trailing_slash (bool): whether or not to add trailing
                 slash when constructing the redirect_uri. Default value is True.
-            timeout_seconds (int): It will raise an error after the timeout timing
-                if there are no credentials response. The value is in seconds.
+            timeout_seconds (int): It will raise a WSGITimeoutError exception after the
+                timeout timing if there are no credentials response. The value is in
+                seconds.
                 When set to None there is no timeout.
                 Default value is None.
             token_audience (str): Passed along with the request for an access
@@ -425,6 +426,10 @@ class InstalledAppFlow(Flow):
         Returns:
             google.oauth2.credentials.Credentials: The OAuth 2.0 credentials
                 for the user.
+
+        Raises:
+            WSGITimeoutError: If there is a timeout when waiting for the response from the
+                authorization server.
         """
         wsgi_app = _RedirectWSGIApp(success_message)
         # Fail fast if the address is occupied
@@ -455,7 +460,15 @@ class InstalledAppFlow(Flow):
 
             # Note: using https here because oauthlib is very picky that
             # OAuth 2.0 should only occur over https.
-            authorization_response = wsgi_app.last_request_uri.replace("http", "https")
+            try:
+                authorization_response = wsgi_app.last_request_uri.replace(
+                    "http", "https"
+                )
+            except AttributeError as e:
+                raise WSGITimeoutError(
+                    "Timed out waiting for response from authorization server"
+                ) from e
+
             self.fetch_token(
                 authorization_response=authorization_response, audience=token_audience
             )
@@ -506,3 +519,7 @@ class _RedirectWSGIApp(object):
         start_response("200 OK", [("Content-type", "text/plain; charset=utf-8")])
         self.last_request_uri = wsgiref.util.request_uri(environ)
         return [self._success_message.encode("utf-8")]
+
+
+class WSGITimeoutError(AttributeError):
+    """Raised when the WSGI server times out waiting for a response."""
