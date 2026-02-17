@@ -269,6 +269,7 @@ class TestInstalledAppFlow(object):
     @pytest.fixture
     def socket(self, port):
         s = socket.socket()
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Enable SO_REUSEADDR
         s.bind(("localhost", port))
         yield s
         s.close()
