@@ -458,10 +458,6 @@ class InstalledAppFlow(Flow):
             local_server.timeout = timeout_seconds
             local_server.handle_request()
 
-            # if wsgi_app.last_request_uri is None:
-            #     # Timeout occurred
-            #     raise WSGITimeout("Timed out waiting for response from authorization server")
-
             # Note: using https here because oauthlib is very picky that
             # OAuth 2.0 should only occur over https.
             try:
