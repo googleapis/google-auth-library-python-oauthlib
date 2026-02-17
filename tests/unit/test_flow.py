@@ -508,7 +508,7 @@ class TestInstalledAppFlow(object):
         # handle_request does nothing (simulating timeout), so last_request_uri remains None
         mock_server.handle_request.return_value = None
 
-        with pytest.raises(flow.WSGITimeout):
+        with pytest.raises(flow.WSGITimeoutError):
             instance.run_local_server(timeout_seconds=1)
 
         webbrowser_mock.get.assert_called_with(None)
