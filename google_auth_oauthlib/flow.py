@@ -458,13 +458,21 @@ class InstalledAppFlow(Flow):
             local_server.timeout = timeout_seconds
             local_server.handle_request()
 
-            if wsgi_app.last_request_uri is None:
-                # Timeout occurred
-                raise WSGITimeout("Timed out waiting for response from authorization server")
+            # if wsgi_app.last_request_uri is None:
+            #     # Timeout occurred
+            #     raise WSGITimeout("Timed out waiting for response from authorization server")
 
             # Note: using https here because oauthlib is very picky that
             # OAuth 2.0 should only occur over https.
-            authorization_response = wsgi_app.last_request_uri.replace("http", "https")
+            try:
+                authorization_response = wsgi_app.last_request_uri.replace(
+                    "http", "https"
+                )
+            except AttributeError as e:
+                raise WSGITimeout(
+                    "Timed out waiting for response from authorization server"
+                ) from e
+
             self.fetch_token(
                 authorization_response=authorization_response, audience=token_audience
             )
@@ -517,5 +525,5 @@ class _RedirectWSGIApp(object):
         return [self._success_message.encode("utf-8")]
 
 
-class WSGITimeout(Exception):
+class WSGITimeout(AttributeError):
     """Raised when the WSGI server times out waiting for a response."""

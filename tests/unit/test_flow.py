@@ -496,3 +496,20 @@ class TestInstalledAppFlow(object):
             urllib.parse.quote(instance.redirect_uri, safe="")
             in print_mock.call_args[0][0]
         )
+
+    @mock.patch("google_auth_oauthlib.flow.webbrowser", autospec=True)
+    @mock.patch("wsgiref.simple_server.make_server", autospec=True)
+    def test_run_local_server_timeout(
+        self, make_server_mock, webbrowser_mock, instance, mock_fetch_token
+    ):
+        mock_server = mock.Mock()
+        make_server_mock.return_value = mock_server
+
+        # handle_request does nothing (simulating timeout), so last_request_uri remains None
+        mock_server.handle_request.return_value = None
+
+        with pytest.raises(flow.WSGITimeout):
+            instance.run_local_server(timeout_seconds=1)
+
+        webbrowser_mock.get.assert_called_with(None)
+        webbrowser_mock.get.return_value.open.assert_called_once()
