@@ -410,7 +410,7 @@ class InstalledAppFlow(Flow):
                 in the user's browser.
             redirect_uri_trailing_slash (bool): whether or not to add trailing
                 slash when constructing the redirect_uri. Default value is True.
-            timeout_seconds (int): It will raise a WSGITimeout exception after the
+            timeout_seconds (int): It will raise a WSGITimeoutError exception after the
                 timeout timing if there are no credentials response. The value is in
                 seconds.
                 When set to None there is no timeout.
@@ -428,7 +428,7 @@ class InstalledAppFlow(Flow):
                 for the user.
 
         Raises:
-            WSGITimeout: If there is a timeout when waiting for the response from the
+            WSGITimeoutError: If there is a timeout when waiting for the response from the
                 authorization server.
         """
         wsgi_app = _RedirectWSGIApp(success_message)
@@ -465,7 +465,7 @@ class InstalledAppFlow(Flow):
                     "http", "https"
                 )
             except AttributeError as e:
-                raise WSGITimeout(
+                raise WSGITimeoutError(
                     "Timed out waiting for response from authorization server"
                 ) from e
 
@@ -521,5 +521,5 @@ class _RedirectWSGIApp(object):
         return [self._success_message.encode("utf-8")]
 
 
-class WSGITimeout(AttributeError):
+class WSGITimeoutError(AttributeError):
     """Raised when the WSGI server times out waiting for a response."""
